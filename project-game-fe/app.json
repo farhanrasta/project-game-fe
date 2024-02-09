@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "project-game-fe",
+    "slug": "project-game-fe",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}

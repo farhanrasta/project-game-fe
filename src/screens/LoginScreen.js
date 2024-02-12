@@ -32,6 +32,7 @@ const LoginScreen = ({navigation}) => {
                 onChangeText={setPassword}
             />
             <Button title='Login' onPress={handleLogin}/>
+            <Text> Belum memiliki akun?</Text>
         </View>
     );
 };

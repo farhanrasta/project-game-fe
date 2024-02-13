@@ -9,6 +9,9 @@ const HomeScreen = ({ navigation, route }) => {
     const [userMove, setUserMove] = useState('');
     const [computerMove, setComputerMove] = useState('');
     const [result, setResult] = useState('');
+    const [score, setScore] = useState(0); // Initialize score to 0
+    const [userWins, setUserWins] = useState(0); // Initialize userWins to 0
+    const [computerWins, setComputerWins] = useState(0); // Initialize computerWins to 0
 
     const handleGame = (userChoice) => {
         const choices = ['gunting', 'batu', 'kertas'];
@@ -23,8 +26,12 @@ const HomeScreen = ({ navigation, route }) => {
             (userChoice === 'kertas' && computerChoice === 'batu')
         ) {
             gameResult = 'Win';
+            setUserWins(userWins + 1); // Increment userWins by 1
+            setScore(score + 1); // Increase score by 100 for a win
         } else {
             gameResult = 'Lose';
+            setComputerWins(computerWins + 1); // Increment computerWins by 1
+            setScore(score - 1); // Decrease score by 50 for a loss
         }
 
         setUserMove(userChoice);
@@ -37,7 +44,6 @@ const HomeScreen = ({ navigation, route }) => {
         // For example: navigation.navigate('Login');
     };
 
-    // Function to map move names to their respective images
     const getImageForMove = (move) => {
         switch (move) {
             case 'gunting':
@@ -55,33 +61,47 @@ const HomeScreen = ({ navigation, route }) => {
         <View style={styles.container}>
             <Text style={styles.title}>Selamat Datang di Permainan</Text>
             <Text style={styles.subtitle}>Pilih salah satu!</Text>
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.buttonWrapper} onPress={() => handleGame('gunting')}>
-                    <Image source={guntingImage} style={styles.image} />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonWrapper} onPress={() => handleGame('batu')}>
-                    <Image source={batuImage} style={styles.image} />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonWrapper} onPress={() => handleGame('kertas')}>
-                    <Image source={kertasImage} style={styles.image} />
+            <Text style={styles.subtitle}> </Text>
+            <View style={styles.scoreContainer}>
+                <Text style={styles.scoreText}>Skor Anda : {userWins}</Text>
+                <Text style={styles.scoreText}>Skor Lawan : {computerWins}</Text>
+            </View>
+            {/* <View style={styles.resultContainer}>
+                <Text style={styles.resultText}>Score: {score}</Text>
+            </View> */}
+            <View style={styles.gameContainer}>
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.buttonWrapper} onPress={() => handleGame('gunting')}>
+                        <Image source={guntingImage} style={styles.image} />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.buttonWrapper} onPress={() => handleGame('batu')}>
+                        <Image source={batuImage} style={styles.image} />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.buttonWrapper} onPress={() => handleGame('kertas')}>
+                        <Image source={kertasImage} style={styles.image} />
+                    </TouchableOpacity>
+                </View>
+                {userMove && computerMove && result && (
+    <View>
+        <View style={styles.resultContainer}>
+            <View style={styles.moveContainer}>
+                <Text>User</Text>
+                <Image source={getImageForMove(userMove)} style={styles.image} />
+            </View>
+            <Text style={styles.title}>  VS  </Text>
+            <View style={styles.moveContainer}>
+                <Text>Computer</Text>
+                <Image source={getImageForMove(computerMove)} style={styles.image} />
+            </View>
+        </View>
+        <Text style={[styles.resultText, styles.resultOutcomeText]}>{result}</Text>
+    </View>
+)}
+
+                <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+                    <Text style={styles.logoutButtonText}>Logout</Text>
                 </TouchableOpacity>
             </View>
-            {userMove && computerMove && result && (
-                <View style={styles.resultContainer}>
-                    <View style={styles.moveContainer}>
-                        <Text>User's Move:</Text>
-                        <Image source={getImageForMove(userMove)} style={styles.image} />
-                    </View>
-                    <View style={styles.moveContainer}>
-                        <Text>Computer's Move:</Text>
-                        <Image source={getImageForMove(computerMove)} style={styles.image} />
-                    </View>
-                    <Text>Result: {result}</Text>
-                </View>
-            )}
-            <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-                <Text style={styles.logoutButtonText}>Logout</Text>
-            </TouchableOpacity>
         </View>
     );
 };
@@ -93,20 +113,38 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
+    scoreContainer: {
+        flexDirection: 'row',
         marginBottom: 10,
     },
-    subtitle: {
+    scoreText: {
         fontSize: 18,
-        marginBottom: 20,
+        fontWeight: 'bold',
+        marginRight: 10,
+    },
+    resultContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        marginTop: 20,
+    },
+    moveContainer: {
+        alignItems: 'center',
+    },    
+    resultTextContainer: {
+        marginTop: 20,
+        alignItems: 'center',
+    },
+    resultText: {
+        fontSize: 16,
+    },
+    gameContainer: {
+        alignItems: 'center',
     },
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        alignItems: 'center',
-        marginBottom: 30,
+        marginBottom: 20,
     },
     buttonWrapper: {
         backgroundColor: 'white',
@@ -120,8 +158,6 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
     },
     logoutButton: {
-        position: 'absolute',
-        bottom: 20,
         backgroundColor: '#FF6347',
         padding: 10,
         borderRadius: 5,
@@ -131,14 +167,22 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
     },
-    resultContainer: {
-        marginTop: 20,
-        alignItems: 'center',
+    resultOutcomeText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginTop: 10,
+        textAlign : 'center',
+        marginTop : 20,
+        marginBottom : 20,
     },
-    moveContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
         marginBottom: 10,
+    },
+    subtitle: {
+        fontSize: 18,
+        marginBottom: 20,
     },
 });
 

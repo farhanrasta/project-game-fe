@@ -1,4 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
+
 import React, {useState} from 'react';
 import { StyleSheet, Text, View, Button, TextInput, Alert } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -71,8 +72,13 @@ const HomeScreen = ({ navigation, route }) => {
     const handleCloseModal = () => {
         setModalVisible(false);
       };
+=======
+import React from 'react';
+import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
+
 
     return(
+
         <View style = {styles.container}>
             <View><Text>Selamat Datang di Permainan</Text></View>
             <View style={styles.logoutButton}>
@@ -108,6 +114,8 @@ const HomeScreen = ({ navigation, route }) => {
                     result={result}
                     />
             </View>
+        <View style={styles.container}>
+            <Text style={styles.welcomeText}>Selamat Datang di Permainan</Text>
         </View>
 
     );
@@ -117,11 +125,24 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
+
     flex: 2,
     flexDirection: "column",
     backgroundColor: '#fff',
     alignItems: 'center',
+
+    backgroundColor: '#e0aed0',
+    flex: 1,
+
     justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  welcomeText: {
+    color: '#756ab6',
+    fontSize: 35,
+    fontWeight: 'bold',
+    alignItems: 'center',
   },
   logoutButton: {
     position: 'absolute',

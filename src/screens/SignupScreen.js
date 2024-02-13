@@ -1,7 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
+import { StyleSheet, Text, Retype, Image, View, Button, TextInput, TouchableOpacity } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import React, {useState} from 'react';
 import axios from 'axios';
 import PopUpSignup from '../components/PopUpSignup';
@@ -10,6 +11,7 @@ const SignupScreen = ({navigation}) => {
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
+    const [retype, setRetype] = useState('');
 
     const [modalVisible, setModalVisible] = useState(false);
     const [status, setStatus] = useState(500);
@@ -17,12 +19,11 @@ const SignupScreen = ({navigation}) => {
 
     const handleSignup = async () => {
         try{
-            const respons = await axios.post('http://localhost:5000/api/signup', {username, password, name});
+            const respons = await axios.post('http://localhost:5000/api/signup', {username, password, name, Retype});
             console.log('respons' ,respons);
             // setUserName(respons.data.username);
             // setPassword(respons.data.password);
-            
-
+ 
             setModalVisible(true);
         } catch (error) {
             if (error.respons && error.respons.status === 401) {
@@ -40,6 +41,17 @@ const SignupScreen = ({navigation}) => {
         }
     };
 
+    const handleSignUp = () => {
+        if (password === retype) {
+          // Passwords match, proceed with sign-up logic
+          Alert.alert('Sukses', 'Password sama');
+          // Add your sign-up logic here
+        } else {
+          // Passwords don't match, show an error message
+          Alert.alert('Salah', 'Password tidak sama. Ketik ulang password');
+        }
+      };
+
     const handleCloseModal = () => {
         setModalVisible(false);
         navigation.navigate('Login');
@@ -47,23 +59,66 @@ const SignupScreen = ({navigation}) => {
 
     return(
         <View style={styles.container}>
+            
             <View style={styles.loginContainer}>
+            <Image
+                source={require('../assets/gb2.png')} // Adjust the path based on your project structure
+                style={styles.logo}
+            />
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Icon name="user" size={20} color="#AC87C5" />
                 <TextInput
-                    placeholder='Masukkan Username'
-                    value={username}
-                    onChangeText={(String => setUserName(String))}
-                />
-                <TextInput
-                    placeholder='Masukkan Password'
-                    value={password}
-                    onChangeText={(String => setPassword(String))}
-                />
-                <TextInput
+                    style={styles.input}
                     placeholder='Masukkan Nama'
+                    placeholderTextColor='#FFE5E5'
                     value={name}
                     onChangeText={(String => setName(String))}
                 />
-                <Button title='Sign Up' onPress={handleSignup}/>
+                </View>
+
+                
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Icon name="user" size={20} color="#AC87C5" />
+                <TextInput
+                    style={styles.input}
+                    placeholder='Masukkan Username'
+                    placeholderTextColor='#FFE5E5'
+                    value={username}
+                    onChangeText={(String => setUserName(String))}
+                />
+                </View>
+                
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Icon name="lock" size={20} color="#AC87C5" />
+                <TextInput
+                    style={styles.input}
+                    placeholder='Masukkan Password'
+                    placeholderTextColor='#FFE5E5'
+                    value={password}
+                    onChangeText={(String => setPassword(String))}
+                    secureTextEntry
+                />
+                 </View>
+                
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Icon name="lock" size={20} color="#AC87C5" />
+                <TextInput
+                    style={styles.input}
+                    placeholder='Masukkan Ulang Password'
+                    placeholderTextColor='#FFE5E5'
+                    value={retype}
+                    onChangeText={(String => setRetype(String))}
+                    secureTextEntry
+                />
+                </View>
+    
+
+
+                <TouchableOpacity disabled={!username || !password || !name || !retype || password !== retype}
+                style={styles.signbutton} onPress={() => navigation.navigate('Home')} >
+                    <Text style={styles.signtext}>Sign Up</Text>
+                </TouchableOpacity>
+                
                 <PopUpSignup  
                     visible={modalVisible} 
                     onClose={handleCloseModal} 
@@ -79,18 +134,52 @@ export default SignupScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 2,
+    flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#fff',
+    backgroundColor: '#FFE5E5',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  
+  logo: {
+    width: 130,
+    height: 180,
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  
   loginContainer: {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  signupButton:{
-    paddingTop: 20
-  }
+  input: {
+    width: 300,
+    height: 40,
+    margin: 12,
+    padding: 10,
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: '#AC87C5',
+    backgroundColor: '#E0AED0',
+  },
+  
+    signbutton:{
+        backgroundColor: '#AC87C5',
+        padding: 10,
+        borderRadius: 5,
+        width: 200,
+        alignItems: 'center',
+        marginTop:20
+  },
+
+   signtext:{
+    color: '#FFE5E5',
+    alignItems: 'center',
+    fontWeight: 'bold',
+    position: 'relative'
+   }
+
+
+
 });

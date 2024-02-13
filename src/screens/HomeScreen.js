@@ -1,161 +1,400 @@
-import { StatusBar } from 'expo-status-bar';
+// import React, { useState } from 'react';
+// import { StyleSheet, Text, View, TouchableOpacity, Image, Button } from 'react-native';
 
-import React, {useState} from 'react';
-import { StyleSheet, Text, View, Button, TextInput, Alert } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
-import axios from 'axios';
-import PopUpModal from '../components/PopUpModal';
+// import guntingImage from '../assets/scissors.png';
+// import batuImage from '../assets/rock.png';
+// import kertasImage from '../assets/paper.png';
+// import vS from '../assets/vs.png';
+// import PopUpModal2 from '../components/PopUpModal2';
+
+// const HomeScreen = ({ navigation, route }) => {
+//     const [userMove, setUserMove] = useState('');
+//     const [computerMove, setComputerMove] = useState('');
+//     const [result, setResult] = useState('');
+//     const [score, setScore] = useState(0); // Initialize score to 0
+//     const [userWins, setUserWins] = useState(0); // Initialize userWins to 0
+//     const [computerWins, setComputerWins] = useState(0); // Initialize computerWins to 0
+//     const [isModalVisible, setIsModalVisible] = useState(false);
+
+//     const handleGame = (userChoice) => {
+//         const choices = ['gunting', 'batu', 'kertas'];
+//         const computerChoice = choices[Math.floor(Math.random() * choices.length)];
+
+//         let gameResult;
+//         if (userChoice === computerChoice) {
+//             gameResult = 'Draw';
+//         } else if (
+//             (userChoice === 'gunting' && computerChoice === 'kertas') ||
+//             (userChoice === 'batu' && computerChoice === 'gunting') ||
+//             (userChoice === 'kertas' && computerChoice === 'batu')
+//         ) {
+//             gameResult = 'Win';
+//             setUserWins(userWins + 1); // Increment userWins by 1
+//             setScore(score + 1); // Increase score by 100 for a win
+//         } else {
+//             gameResult = 'Lose';
+//             setComputerWins(computerWins + 1); // Increment computerWins by 1
+//             setScore(score - 1); // Decrease score by 50 for a loss
+//         }
+
+//         setUserMove(userChoice);
+//         setComputerMove(computerChoice);
+//         setResult(gameResult);
+//         setIsModalVisible(true); // Show the modal after the game result is determined
+//     };
+
+//     const handleModalClose = () => {
+//         setIsModalVisible(false); // Close the modal
+//         setUserMove('');
+//         setComputerMove('');
+//         setResult('');
+//     };
+
+//     const handleLogout = () => {
+//         // Implement logout functionality
+//         // For example: navigation.navigate('Login');
+//     };
+
+//     const getImageForMove = (move) => {
+//         switch (move) {
+//             case 'gunting':
+//                 return guntingImage;
+//             case 'batu':
+//                 return batuImage;
+//             case 'kertas':
+//                 return kertasImage;
+//             default:
+//                 return null;
+//         }
+//     };
+
+//     return (
+//         <View style={styles.container}>
+//             <Text style={styles.title}>Selamat Datang di Permainan</Text>
+//             <Text style={styles.subtitle}>Pilih salah satu!</Text>
+//             <Text style={styles.subtitle}> </Text>
+//             <View style={styles.scoreContainer}>
+//                 <Text style={styles.scoreText}>Skor Anda : {userWins}</Text>
+//                 <Text style={styles.scoreText}>Skor Lawan : {computerWins}</Text>
+//             </View>
+//             <View style={styles.gameContainer}>
+//                 <View style={styles.buttonContainer}>
+//                     <TouchableOpacity style={styles.buttonWrapper} onPress={() => handleGame('gunting')}>
+//                         <Image source={guntingImage} style={styles.image} />
+//                     </TouchableOpacity>
+//                     <Text>   </Text>
+//                     <TouchableOpacity style={styles.buttonWrapper} onPress={() => handleGame('batu')}>
+//                         <Image source={batuImage} style={styles.image} />
+//                     </TouchableOpacity>
+//                     <Text>   </Text>
+//                     <TouchableOpacity style={styles.buttonWrapper} onPress={() => handleGame('kertas')}>
+//                         <Image source={kertasImage} style={styles.image} />
+//                     </TouchableOpacity>
+//                     <Text>   </Text>
+//                 </View>
+//                 {userMove && computerMove && result && (
+//                     <View>
+//                         <View style={styles.resultContainer}>
+//                             <View style={styles.moveContainer}>
+//                                 <Text>User</Text>
+//                                 <Image source={getImageForMove(userMove)} style={styles.image} />
+//                             </View>
+//                             <Image source={vS} style={styles.image} />
+//                             <View style={styles.moveContainer}>
+//                                 <Text>Computer</Text>
+//                                 <Image source={getImageForMove(computerMove)} style={styles.image} />
+//                             </View>
+//                         </View>
+//                         <Text style={[styles.resultText, styles.resultOutcomeText]}>{result}</Text>
+//                     </View>
+//                 )}
+//                 <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+//                     <Text style={styles.logoutButtonText}>Logout</Text>
+//                 </TouchableOpacity>
+//             </View>
+//             <PopUpModal2 visible={isModalVisible} onClose={handleModalClose} result={result} />
+//         </View>
+//     );
+// };
+
+// const styles = StyleSheet.create({
+//     container: {
+//         flex: 1,
+//         backgroundColor: '#FFE5E5',
+//         alignItems: 'center',
+//         justifyContent: 'center',
+//     },
+//     scoreContainer: {
+//         flexDirection: 'row',
+//         marginBottom: 10,
+//     },
+//     scoreText: {
+//         fontSize: 18,
+//         fontWeight: 'bold',
+//         marginRight: 10,
+//     },
+//     resultContainer: {
+//         flexDirection: 'row',
+//         alignItems: 'center',
+//         justifyContent: 'space-around',
+//         marginTop: 20,
+//     },
+//     moveContainer: {
+//         alignItems: 'center',
+//     },
+//     gameContainer: {
+//         alignItems: 'center',
+//     },
+//     buttonContainer: {
+//         flexDirection: 'row',
+//         justifyContent: 'space-around',
+//         marginBottom: 20,
+//     },
+//     buttonWrapper: {
+//         backgroundColor: 'white',
+//         padding: 10,
+//         borderRadius: 10,
+//         elevation: 3,
+//     },
+//     image: {
+//         width: 80,
+//         height: 80,
+//         resizeMode: 'contain',
+//     },
+//     logoutButton: {
+//         backgroundColor: '#AC87C5',
+//         padding: 10,
+//         borderRadius: 5,
+//     },
+//     logoutButtonText: {
+//         color: 'white',
+//         fontSize: 16,
+//         fontWeight: 'bold',
+//     },
+//     resultOutcomeText: {
+//         fontSize: 20,
+//         fontWeight: 'bold',
+//         marginTop: 10,
+//         textAlign: 'center',
+//         marginTop: 20,
+//         marginBottom: 20,
+//     },
+//     title: {
+//         fontSize: 24,
+//         fontWeight: 'bold',
+//         marginTop: 20,
+//     },
+//     subtitle: {
+//         fontSize: 18,
+//         marginBottom: 20,
+//     },
+// });
+
+// export default HomeScreen;
+
+import React, { useState, useRef } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Button } from 'react-native';
+import ConfettiCannon from 'react-native-confetti-cannon';
+
+import guntingImage from '../assets/scissors.png';
+import batuImage from '../assets/rock.png';
+import kertasImage from '../assets/paper.png';
+import vS from '../assets/vs.png';
+import PopUpModal2 from '../components/PopUpModal2';
 
 const HomeScreen = ({ navigation, route }) => {
-
-    const { username, token } = route.params;
-
-    const [modalVisible, setModalVisible] = useState(false);
     const [userMove, setUserMove] = useState('');
     const [computerMove, setComputerMove] = useState('');
     const [result, setResult] = useState('');
+    const [score, setScore] = useState(0);
+    const [userWins, setUserWins] = useState(0);
+    const [computerWins, setComputerWins] = useState(0);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const confettiRef = useRef(null);
 
-    const handleGame = async (move) => {
+    const handleGame = (userChoice) => {
+        const choices = ['gunting', 'batu', 'kertas'];
+        const computerChoice = choices[Math.floor(Math.random() * choices.length)];
 
-        console.log("userMove:", move);
-        console.log(token);
-        console.log(username);
+        let gameResult;
+        if (userChoice === computerChoice) {
+            gameResult = 'Draw';
+        } else if (
+            (userChoice === 'gunting' && computerChoice === 'kertas') ||
+            (userChoice === 'batu' && computerChoice === 'gunting') ||
+            (userChoice === 'kertas' && computerChoice === 'batu')
+        ) {
+            gameResult = 'Win';
+            setUserWins(userWins + 1);
+            setScore(score + 1);
+        } else {
+            gameResult = 'Lose';
+            setComputerWins(computerWins + 1);
+            setScore(score - 1);
+        }
 
-        try{
-            const respons = await axios.post(`http://localhost:5000/api/game/${username}`, {userMove: move},{
-                headers: {
-                    Authorization : `Bearer ${token}`,
-                    'Content-type' : 'application/json'
-                }
-            });
-            setUserMove(respons.data.userMove);
-            console.log("userMOOOOOVE:" ,respons.data)
-            setComputerMove(respons.data.computerMove);
-            setResult(respons.data.result);
-
-            console.log("Game Result Alert:", `User Move: ${respons.data.userMove}\nComputer Move: ${respons.data.computerMove}\nResult: ${respons.data.result}`);
-
-            setModalVisible(true);
-            // Alert.alert(
-            //     'Game Result',
-            //     `User Move: ${respons.data.userMove}\nComputer Move: ${respons.data.computerMove}\nResult: ${respons.data.result}`,
-            //     [{ text: 'OK' }]
-            //   );
-        } catch (error) {
-            console.error('Game Error', error);
+        setUserMove(userChoice);
+        setComputerMove(computerChoice);
+        setResult(gameResult);
+        setIsModalVisible(true);
+        if (gameResult === 'Win' && confettiRef.current) {
+            confettiRef.current.start();
         }
     };
 
-    const handleLogout = async () => {
+    const handleModalClose = () => {
+        setIsModalVisible(false);
+        setUserMove('');
+        setComputerMove('');
+        setResult('');
+    };
 
-        try{
-            const respons = await axios.delete(`http://localhost:5000/api/logout/${username}`,{
-                headers: {
-                    Authorization : `Bearer ${token}`,
-                    'Content-type' : 'application/json'
-                }
-            });
-            console.log(respons);
-            
-            if (respons.status === 200) {
-                navigation.navigate('Login');
-                console.log('Logout Success');
-            } else {
-                console.log('Logout Failed');
-            }
-        } catch (error) {
-            console.error('Logout Error', error);
+    const handleLogout = () => {
+        // Implement logout functionality
+        // For example: navigation.navigate('Login');
+    };
+
+    const getImageForMove = (move) => {
+        switch (move) {
+            case 'gunting':
+                return guntingImage;
+            case 'batu':
+                return batuImage;
+            case 'kertas':
+                return kertasImage;
+            default:
+                return null;
         }
     };
 
-    const handleCloseModal = () => {
-        setModalVisible(false);
-      };
-=======
-import React from 'react';
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
-
-
-    return(
-
-        <View style = {styles.container}>
-            <View><Text>Selamat Datang di Permainan</Text></View>
-            <View style={styles.logoutButton}>
-            <Button
-                title="logout"
-                onPress={() => handleLogout()}
-            />
-            </View>
-            <View style = {styles.buttonContainer}>
-                <View style={styles.buttonWrapper}>
-                    <Button
-                    title="Gunting"
-                    onPress={() => handleGame('gunting')}
-                    />
-                </View>
-                <View style={styles.buttonWrapper}>
-                    <Button
-                    title="Batu"
-                    onPress={() => handleGame('batu')}
-                    />
-                </View>
-                <View style={styles.buttonWrapper}>
-                    <Button
-                    title="Kertas"
-                    onPress={() => handleGame('kertas')}
-                    />
-                </View>
-                <PopUpModal  
-                    visible={modalVisible} 
-                    onClose={handleCloseModal} 
-                    userMove={userMove} 
-                    computerMove={computerMove}
-                    result={result}
-                    />
-            </View>
+    return (
         <View style={styles.container}>
-            <Text style={styles.welcomeText}>Selamat Datang di Permainan</Text>
+            <Text style={styles.title}>Selamat Datang di Permainan</Text>
+            <Text style={styles.subtitle}>Pilih salah satu!</Text>
+            <Text style={styles.subtitle}> </Text>
+            <View style={styles.scoreContainer}>
+                <Text style={styles.scoreText}>Skor Anda : {userWins}</Text>
+                <Text style={styles.scoreText}>Skor Lawan : {computerWins}</Text>
+            </View>
+            <View style={styles.gameContainer}>
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.buttonWrapper} onPress={() => handleGame('gunting')}>
+                        <Image source={guntingImage} style={styles.image} />
+                    </TouchableOpacity>
+                    <Text>   </Text>
+                    <TouchableOpacity style={styles.buttonWrapper} onPress={() => handleGame('batu')}>
+                        <Image source={batuImage} style={styles.image} />
+                    </TouchableOpacity>
+                    <Text>   </Text>
+                    <TouchableOpacity style={styles.buttonWrapper} onPress={() => handleGame('kertas')}>
+                        <Image source={kertasImage} style={styles.image} />
+                    </TouchableOpacity>
+                    <Text>   </Text>
+                </View>
+                {userMove && computerMove && result && (
+                    <View>
+                        <View style={styles.resultContainer}>
+                            <View style={styles.moveContainer}>
+                                <Text>User</Text>
+                                <Image source={getImageForMove(userMove)} style={styles.image} />
+                            </View>
+                            <Image source={vS} style={styles.image} />
+                            <View style={styles.moveContainer}>
+                                <Text>Computer</Text>
+                                <Image source={getImageForMove(computerMove)} style={styles.image} />
+                            </View>
+                        </View>
+                        <Text style={[styles.resultText, styles.resultOutcomeText]}>{result}</Text>
+                    </View>
+                )}
+                <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+                    <Text style={styles.logoutButtonText}>Logout</Text>
+                </TouchableOpacity>
+            </View>
+            <PopUpModal2 visible={isModalVisible} onClose={handleModalClose} result={result} />
+            {result === 'Win' && (
+                <ConfettiCannon
+                    count={200}
+                    origin={{ x: -10, y: 0 }}
+                    autoStart={false}
+                    ref={confettiRef}
+                />
+            )}
         </View>
-
     );
 };
 
-export default HomeScreen;
-
 const styles = StyleSheet.create({
-  container: {
-
-    flex: 2,
-    flexDirection: "column",
-    backgroundColor: '#fff',
-    alignItems: 'center',
-
-    backgroundColor: '#e0aed0',
-    flex: 1,
-
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  welcomeText: {
-    color: '#756ab6',
-    fontSize: 35,
-    fontWeight: 'bold',
-    alignItems: 'center',
-  },
-  logoutButton: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    marginTop: 20,
-    marginRight: 20,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    paddingTop: 20,
-  },
-  buttonWrapper: {
-    marginRight: 20
-  },
+    container: {
+        flex: 1,
+        backgroundColor: '#FFE5E5',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    scoreContainer: {
+        flexDirection: 'row',
+        marginBottom: 10,
+    },
+    scoreText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginRight: 10,
+    },
+    resultContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        marginTop: 20,
+    },
+    moveContainer: {
+        alignItems: 'center',
+    },
+    gameContainer: {
+        alignItems: 'center',
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginBottom: 20,
+    },
+    buttonWrapper: {
+        backgroundColor: 'white',
+        padding: 10,
+        borderRadius: 10,
+        elevation: 3,
+    },
+    image: {
+        width: 80,
+        height: 80,
+        resizeMode: 'contain',
+    },
+    logoutButton: {
+        backgroundColor: '#AC87C5',
+        padding: 10,
+        borderRadius: 5,
+    },
+    logoutButtonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    resultOutcomeText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginTop: 10,
+        textAlign: 'center',
+        marginTop: 20,
+        marginBottom: 20,
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginTop: 20,
+    },
+    subtitle: {
+        fontSize: 18,
+        marginBottom: 20,
+    },
 });
+
+export default HomeScreen;

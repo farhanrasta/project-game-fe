@@ -1,161 +1,165 @@
-import { StatusBar } from 'expo-status-bar';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 
-import React, {useState} from 'react';
-import { StyleSheet, Text, View, Button, TextInput, Alert } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
-import axios from 'axios';
-import PopUpModal from '../components/PopUpModal';
+const GameScreen = () => {
+  const [userChoice, setUserChoice] = useState(null);
+  const [computerChoice, setComputerChoice] = useState(null);
+  const [result, setResult] = useState(null);
 
-const HomeScreen = ({ navigation, route }) => {
+  const animatedValue = new Animated.Value(0);
+  const animatedValueComputer = new Animated.Value(0);
 
-    const { username, token } = route.params;
+  const animateChoices = () => {
+    Animated.timing(animatedValue, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: false,
+    }).start();
 
-    const [modalVisible, setModalVisible] = useState(false);
-    const [userMove, setUserMove] = useState('');
-    const [computerMove, setComputerMove] = useState('');
-    const [result, setResult] = useState('');
+    setTimeout(() => {
+      const randomNum = Math.floor(Math.random() * 3);
+      const choices = ['Scissors', 'Rock', 'Paper'];
+      setComputerChoice(choices[randomNum]);
+      Animated.timing(animatedValueComputer, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: false,
+      }).start();
+      setTimeout(() => {
+        calculateResult();
+      }, 1000);
+    }, 1000);
+  };
 
-    const handleGame = async (move) => {
+  const calculateResult = () => {
+    if (userChoice === computerChoice) {
+      setResult('Draw');
+    } else if (
+      (userChoice === 'Rock' && computerChoice === 'Scissors') ||
+      (userChoice === 'Paper' && computerChoice === 'Rock') ||
+      (userChoice === 'Scissors' && computerChoice === 'Paper')
+    ) {
+      setResult('You Win');
+    } else {
+      setResult('Computer Wins');
+    }
+  };
 
-        console.log("userMove:", move);
-        console.log(token);
-        console.log(username);
-
-        try{
-            const respons = await axios.post(`http://localhost:5000/api/game/${username}`, {userMove: move},{
-                headers: {
-                    Authorization : `Bearer ${token}`,
-                    'Content-type' : 'application/json'
-                }
-            });
-            setUserMove(respons.data.userMove);
-            console.log("userMOOOOOVE:" ,respons.data)
-            setComputerMove(respons.data.computerMove);
-            setResult(respons.data.result);
-
-            console.log("Game Result Alert:", `User Move: ${respons.data.userMove}\nComputer Move: ${respons.data.computerMove}\nResult: ${respons.data.result}`);
-
-            setModalVisible(true);
-            // Alert.alert(
-            //     'Game Result',
-            //     `User Move: ${respons.data.userMove}\nComputer Move: ${respons.data.computerMove}\nResult: ${respons.data.result}`,
-            //     [{ text: 'OK' }]
-            //   );
-        } catch (error) {
-            console.error('Game Error', error);
-        }
-    };
-
-    const handleLogout = async () => {
-
-        try{
-            const respons = await axios.delete(`http://localhost:5000/api/logout/${username}`,{
-                headers: {
-                    Authorization : `Bearer ${token}`,
-                    'Content-type' : 'application/json'
-                }
-            });
-            console.log(respons);
-            
-            if (respons.status === 200) {
-                navigation.navigate('Login');
-                console.log('Logout Success');
-            } else {
-                console.log('Logout Failed');
-            }
-        } catch (error) {
-            console.error('Logout Error', error);
-        }
-    };
-
-    const handleCloseModal = () => {
-        setModalVisible(false);
-      };
-=======
-import React from 'react';
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
-
-
-    return(
-
-        <View style = {styles.container}>
-            <View><Text>Selamat Datang di Permainan</Text></View>
-            <View style={styles.logoutButton}>
-            <Button
-                title="logout"
-                onPress={() => handleLogout()}
-            />
-            </View>
-            <View style = {styles.buttonContainer}>
-                <View style={styles.buttonWrapper}>
-                    <Button
-                    title="Gunting"
-                    onPress={() => handleGame('gunting')}
-                    />
-                </View>
-                <View style={styles.buttonWrapper}>
-                    <Button
-                    title="Batu"
-                    onPress={() => handleGame('batu')}
-                    />
-                </View>
-                <View style={styles.buttonWrapper}>
-                    <Button
-                    title="Kertas"
-                    onPress={() => handleGame('kertas')}
-                    />
-                </View>
-                <PopUpModal  
-                    visible={modalVisible} 
-                    onClose={handleCloseModal} 
-                    userMove={userMove} 
-                    computerMove={computerMove}
-                    result={result}
-                    />
-            </View>
-        <View style={styles.container}>
-            <Text style={styles.welcomeText}>Selamat Datang di Permainan</Text>
-        </View>
-
-    );
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Rock Paper Scissors</Text>
+      <View style={styles.choicesContainer}>
+        <Animated.View
+          style={[
+            styles.choice,
+            {
+              transform: [
+                {
+                  translateY: animatedValue.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [200, 0],
+                  }),
+                },
+              ],
+            },
+          ]}
+        >
+          <Text style={styles.choiceText}>{userChoice}</Text>
+        </Animated.View>
+        <Animated.View
+          style={[
+            styles.choice,
+            {
+              transform: [
+                {
+                  translateY: animatedValueComputer.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [200, 0],
+                  }),
+                },
+              ],
+            },
+          ]}
+        >
+          <Text style={styles.choiceText}>{computerChoice}</Text>
+        </Animated.View>
+      </View>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            setUserChoice('Rock');
+            animateChoices();
+          }}
+        >
+          <Text style={styles.buttonText}>Rock</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            setUserChoice('Paper');
+            animateChoices();
+          }}
+        >
+          <Text style={styles.buttonText}>Paper</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            setUserChoice('Scissors');
+            animateChoices();
+          }}
+        >
+          <Text style={styles.buttonText}>Scissors</Text>
+        </TouchableOpacity>
+      </View>
+      {result && <Text style={styles.result}>{result}</Text>}
+    </View>
+  );
 };
-
-export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
-
-    flex: 2,
-    flexDirection: "column",
-    backgroundColor: '#fff',
-    alignItems: 'center',
-
-    backgroundColor: '#e0aed0',
     flex: 1,
-
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
   },
-  welcomeText: {
-    color: '#756ab6',
-    fontSize: 35,
-    fontWeight: 'bold',
-    alignItems: 'center',
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
   },
-  logoutButton: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    marginTop: 20,
-    marginRight: 20,
+  choicesContainer: {
+    flexDirection: 'row',
+    marginBottom: 20,
+  },
+  choice: {
+    marginHorizontal: 10,
+    borderWidth: 2,
+    padding: 10,
+    borderRadius: 10,
+  },
+  choiceText: {
+    fontSize: 20,
   },
   buttonContainer: {
     flexDirection: 'row',
-    paddingTop: 20,
+    justifyContent: 'space-between',
+    marginBottom: 20,
   },
-  buttonWrapper: {
-    marginRight: 20
+  button: {
+    backgroundColor: 'blue',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  result: {
+    fontSize: 24,
+    fontWeight: 'bold',
   },
 });
+
+export default GameScreen;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, Modal,Pressable } from 'react-native';
+import axios from 'axios';
 
 import guntingImage from '../assets/scissors.png';
 import batuImage from '../assets/rock.png';
@@ -35,6 +36,8 @@ const HomeScreen = ({ navigation, route }) => {
     const computerMoves = [guntingImage, batuImage, kertasImage];
     const [logoutModalVisible, setLogoutModalVisible] = useState(false);
 
+    const { username, token } = route.params;
+
     useEffect(() => {
         if (animationRunning) {
             const interval = setInterval(() => {
@@ -49,35 +52,63 @@ const HomeScreen = ({ navigation, route }) => {
         }
     }, [animationRunning]);
 
-    const handleGame = (userChoice) => {
+    const handleGame = aync(userChoice) => {
+        console.log(userChoice);
         const choices = ['gunting', 'batu', 'kertas'];
         const computerChoice = choices[Math.floor(Math.random() * choices.length)];
 
         setUserMove(userChoice);
+        console.log(userMove);
         setComputerMove('running'); // Set computer move to a running state initially
         setAnimationRunning(true); // Start animation
 
         // Determine game result after 3 seconds
         setTimeout(() => {
             setComputerMove(computerChoice); // Set final computer move
-            let gameResult;
-            if (userChoice === computerChoice) {
-                gameResult = 'Draw';
-            } else if (
-                (userChoice === 'gunting' && computerChoice === 'kertas') ||
-                (userChoice === 'batu' && computerChoice === 'gunting') ||
-                (userChoice === 'kertas' && computerChoice === 'batu')
-            ) {
-                gameResult = 'Win';
-                setUserWins(userWins + 1);
-                setScore(score + 1);
-            } else {
-                gameResult = 'Lose';
-                setComputerWins(computerWins + 1);
-                setScore(score - 1);
+            try{
+                const respons = axios.post(`http://localhost:5000/api/game/${username}`, {userChoice, computerChoice},{
+                    headers: {
+                        Authorization : `Bearer ${token}`,
+                        'Content-type' : 'application/json'
+                    }
+                });
+                setUserMove(respons.data.userMove);
+                console.log("userMOOOOOVE:" ,respons.data)
+                setComputerMove(respons.data.computerMove);
+                setResult(respons.data.result);
+                setUserWins(respons.data.userWins);
+                setComputerWins(respons.data.computerWins);
+    
+                console.log("Game Result Alert:", `User Move: ${respons.data.userMove}\nComputer Move: ${respons.data.computerMove}\nResult: ${respons.data.result}`);
+                console.log("Game Result Alert:", `User Wins: ${respons.data.userWins}\nComputer Wins: ${respons.data.computerWins}`);
+                setModalVisible(true);
+                // Alert.alert(
+                //     'Game Result',
+                //     `User Move: ${respons.data.userMove}\nComputer Move: ${respons.data.computerMove}\nResult: ${respons.data.result}`,
+                //     [{ text: 'OK' }]
+                //   );
+            } catch (error) {
+                console.error('Game Error', error);
             }
-            setResult(gameResult);
-            setIsModalVisible(true);
+            // setComputerMove(computerChoice); // Set final computer move
+            // let gameResult;
+            // if (userChoice === computerChoice) {
+            //     gameResult = 'Draw';
+            // } else if (
+            //     (userChoice === 'gunting' && computerChoice === 'kertas') ||
+            //     (userChoice === 'batu' && computerChoice === 'gunting') ||
+            //     (userChoice === 'kertas' && computerChoice === 'batu')
+            // ) {
+            //     gameResult = 'Win';
+            //     setUserWins(userWins + 1);
+            //     setScore(score + 1);
+            // } else {
+            //     gameResult = 'Lose';
+            //     setComputerWins(computerWins + 1);
+            //     setScore(score - 1);
+            // }
+            // setResult(gameResult);
+            // setIsModalVisible(true);
         }, 1000);
     };
 

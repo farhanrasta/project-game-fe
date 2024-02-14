@@ -11,7 +11,7 @@ const SignupScreen = ({navigation}) => {
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
-    const [retype, setRetype] = useState('');
+    const [retypePassword, setRetypePassword] = useState('');
 
     const [modalVisible, setModalVisible] = useState(false);
     const [status, setStatus] = useState(500);
@@ -19,7 +19,7 @@ const SignupScreen = ({navigation}) => {
 
     const handleSignup = async () => {
         try{
-            const respons = await axios.post('http://localhost:5000/api/signup', {username, password, name, Retype});
+            const respons = await axios.post('http://localhost:5000/api/signup', {username, password, name, retypePassword});
             console.log('respons' ,respons);
             // setUserName(respons.data.username);
             // setPassword(respons.data.password);
@@ -42,7 +42,7 @@ const SignupScreen = ({navigation}) => {
     };
 
     const handleSignUp = () => {
-        if (password === retype) {
+        if (password === retypePassword) {
           // Passwords match, proceed with sign-up logic
           Alert.alert('Sukses', 'Password sama');
           // Add your sign-up logic here
@@ -107,7 +107,7 @@ const SignupScreen = ({navigation}) => {
                     placeholder='Masukkan Ulang Password'
                     placeholderTextColor='#FFE5E5'
                     value={retype}
-                    onChangeText={(String => setRetype(String))}
+                    onChangeText={(String => setRetypePassword(String))}
                     secureTextEntry
                 />
                 </View>

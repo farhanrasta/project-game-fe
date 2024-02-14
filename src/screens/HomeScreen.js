@@ -9,7 +9,6 @@ import vS from '../assets/vs2.png';
 import homepageImage from '../assets/gb2.png';
 import settingImage from '../assets/logout.png';
 import restartImage from '../assets/restart.png';
-import leaderboardImage from '../assets/leaderboard.png';
 
 const getImageForMove = (move) => {
     switch (move) {
@@ -53,7 +52,7 @@ const HomeScreen = ({ navigation, route }) => {
         }
     }, [animationRunning]);
 
-    const handleGame = aync(userChoice) => {
+    const handleGame = (userChoice) => {
         console.log(userChoice);
         const choices = ['gunting', 'batu', 'kertas'];
         const computerChoice = choices[Math.floor(Math.random() * choices.length)];
@@ -64,15 +63,16 @@ const HomeScreen = ({ navigation, route }) => {
         setAnimationRunning(true); // Start animation
 
         // Determine game result after 3 seconds
-        setTimeout(() => {
-            setComputerMove(computerChoice); // Set final computer move
+        setTimeout( async () => {
+            setComputerMove(computerMoveIndex); // Set final computer move
             try{
-                const respons = axios.post(`http://localhost:5000/api/game/${username}`, {userChoice, computerChoice},{
+                const respons = await axios.post(`http://localhost:5000/api/game/${username}`, {userMove : userChoice, computerMove: computerMoveIndex},{
                     headers: {
                         Authorization : `Bearer ${token}`,
                         'Content-type' : 'application/json'
                     }
                 });
+
                 setUserMove(respons.data.userMove);
                 console.log("userMOOOOOVE:" ,respons.data)
                 setComputerMove(respons.data.computerMove);
@@ -135,9 +135,6 @@ const HomeScreen = ({ navigation, route }) => {
     return (
         <View style={styles.container}>
             <View style={styles.settingContainer}>
-                <TouchableOpacity style={styles.leaderboardButton} onPress={handleRestart}>
-                <Image source={leaderboardImage} style={styles.logo2} />
-                </TouchableOpacity> 
                 <TouchableOpacity style={styles.settingButton} onPress={handleRestart}>
                 <Image source={restartImage} style={styles.logo} />
                 </TouchableOpacity>  
@@ -153,8 +150,6 @@ const HomeScreen = ({ navigation, route }) => {
                 <Text style={styles.scoreText}>  {userWins}</Text>
                 <Text style={styles.scoreText}>:  {computerWins}</Text>
             </View>
-            <Text>Choose One ! </Text>
-            <Text>   </Text>
             <View style={styles.gameContainer}>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity style={styles.buttonWrapper} onPress={() => handleGame('gunting')}>
@@ -301,19 +296,11 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end' ,
         marginLeft: 5,
     },
-    logo2: {
-        width: 40,
-        height: 40,
-        resizeMode: 'contain',
-        justifyContent: 'flex-end' ,
-        marginLeft: 15,
-        padding: 20,
-        borderRadius: 15,
-    },
-
     leaderboardButton: {
+        backgroundColor: '#E493B3',
+        padding: 10,
         borderRadius: 5,
-        marginRight : 275,
+        marginTop : 40,
     },
     restartButton: {
         backgroundColor: '#E0AED0',

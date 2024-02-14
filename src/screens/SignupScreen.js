@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, Retype, Image, View, Button, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, Image, View, Button, TextInput, TouchableOpacity } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -106,7 +106,7 @@ const SignupScreen = ({navigation}) => {
                     style={styles.input}
                     placeholder='Masukkan Ulang Password'
                     placeholderTextColor='#FFE5E5'
-                    value={retype}
+                    value={retypePassword}
                     onChangeText={(String => setRetypePassword(String))}
                     secureTextEntry
                 />
@@ -114,7 +114,7 @@ const SignupScreen = ({navigation}) => {
     
 
 
-                <TouchableOpacity disabled={!username || !password || !name || !retype || password !== retype}
+                <TouchableOpacity disabled={!username || !password || !name || !retypePassword || password !== retypePassword}
                 style={styles.signbutton} onPress={() => navigation.navigate('Home')} >
                     <Text style={styles.signtext}>Sign Up</Text>
                 </TouchableOpacity>

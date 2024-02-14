@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, Retype, Image, View, Button, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, Image, View, Button, TextInput, TouchableOpacity } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -11,7 +11,7 @@ const SignupScreen = ({navigation}) => {
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
-    const [retype, setRetype] = useState('');
+    const [retypePassword, setRetypePassword] = useState('');
 
     const [modalVisible, setModalVisible] = useState(false);
     const [status, setStatus] = useState(500);
@@ -19,7 +19,7 @@ const SignupScreen = ({navigation}) => {
 
     const handleSignup = async () => {
         try{
-            const respons = await axios.post('http://localhost:5000/api/signup', {username, password, name, Retype});
+            const respons = await axios.post('http://localhost:5000/api/signup', {username, password, name, retypePassword});
             console.log('respons' ,respons);
             // setUserName(respons.data.username);
             // setPassword(respons.data.password);
@@ -42,7 +42,7 @@ const SignupScreen = ({navigation}) => {
     };
 
     const handleSignUp = () => {
-        if (password === retype) {
+        if (password === retypePassword) {
           // Passwords match, proceed with sign-up logic
           Alert.alert('Sukses', 'Password sama');
           // Add your sign-up logic here
@@ -106,15 +106,15 @@ const SignupScreen = ({navigation}) => {
                     style={styles.input}
                     placeholder='Masukkan Ulang Password'
                     placeholderTextColor='#FFE5E5'
-                    value={retype}
-                    onChangeText={(String => setRetype(String))}
+                    value={retypePassword}
+                    onChangeText={(String => setRetypePassword(String))}
                     secureTextEntry
                 />
                 </View>
     
 
 
-                <TouchableOpacity disabled={!username || !password || !name || !retype || password !== retype}
+                <TouchableOpacity disabled={!username || !password || !name || !retypePassword || password !== retypePassword}
                 style={styles.signbutton} onPress={() => navigation.navigate('Home')} >
                     <Text style={styles.signtext}>Sign Up</Text>
                 </TouchableOpacity>

@@ -13,10 +13,10 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Home'>
+      <Stack.Navigator initialRouteName='Login'>
         <Stack.Screen name="Home" component={HomeScreen}/>
-        {/* <Stack.Screen name="Login" component={LoginScreen}/>
-        <Stack.Screen name="Signup" component={SignupScreen}/> */}
+        <Stack.Screen name="Login" component={LoginScreen}/>
+        <Stack.Screen name="Signup" component={SignupScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   )

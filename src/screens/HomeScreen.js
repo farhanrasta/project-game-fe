@@ -67,7 +67,7 @@ const HomeScreen = ({ navigation, route }) => {
         setTimeout( async () => {
             setComputerMove(computerMoveIndex); // Set final computer move
             try{
-                const respons = await axios.post(`http://localhost:5000/api/game/${username}`, {userMove : userChoice, computerMove: computerMoveIndex},{
+                const respons = await axios.post(`http://localhost:5000/api/game/${username}`, {userMove : userChoice, computerMove: computerChoice},{
                     headers: {
                         Authorization : `Bearer ${token}`,
                         'Content-type' : 'application/json'
@@ -83,7 +83,7 @@ const HomeScreen = ({ navigation, route }) => {
     
                 console.log("Game Result Alert:", `User Move: ${respons.data.userMove}\nComputer Move: ${respons.data.computerMove}\nResult: ${respons.data.result}`);
                 console.log("Game Result Alert:", `User Wins: ${respons.data.userWins}\nComputer Wins: ${respons.data.computerWins}`);
-                setModalVisible(true);
+                setIsModalVisible(true);
                 // Alert.alert(
                 //     'Game Result',
                 //     `User Move: ${respons.data.userMove}\nComputer Move: ${respons.data.computerMove}\nResult: ${respons.data.result}`,

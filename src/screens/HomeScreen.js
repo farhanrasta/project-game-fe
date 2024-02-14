@@ -9,6 +9,7 @@ import vS from '../assets/vs2.png';
 import homepageImage from '../assets/gb2.png';
 import settingImage from '../assets/logout.png';
 import restartImage from '../assets/restart.png';
+import PopUpModal from '../components/PopUpModal';
 
 const getImageForMove = (move) => {
     switch (move) {
@@ -181,7 +182,17 @@ const HomeScreen = ({ navigation, route }) => {
                         {/* <Text style={[styles.resultText, styles.resultOutcomeText]}>{result}</Text> */}
                     </View>
                 )}
+                    
+
+                    <PopUpModal
+                        visible={isModalVisible}
+                        onClose={handleModalClose}
+                        userMove={userMove}
+                        computerMove={computerMove}
+                        result={result}
+                    />
                     {/* Logout Modal */}
+
                     <Modal
                     animationType="slide"
                     transparent={true}

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Modal,Pressable } from 'react-native';
 
 import guntingImage from '../assets/scissors.png';
 import batuImage from '../assets/rock.png';
 import kertasImage from '../assets/paper.png';
-import vS from '../assets/vs.png';
+import vS from '../assets/vs2.png';
+import homepageImage from '../assets/gb2.png';
+import settingImage from '../assets/logout.png';
 
 const getImageForMove = (move) => {
     switch (move) {
@@ -30,6 +32,7 @@ const HomeScreen = ({ navigation, route }) => {
     const [animationRunning, setAnimationRunning] = useState(false);
     const [computerMoveIndex, setComputerMoveIndex] = useState(0);
     const computerMoves = [guntingImage, batuImage, kertasImage];
+    const [logoutModalVisible, setLogoutModalVisible] = useState(false);
 
     useEffect(() => {
         if (animationRunning) {
@@ -41,7 +44,7 @@ const HomeScreen = ({ navigation, route }) => {
             setTimeout(() => {
                 clearInterval(interval);
                 setAnimationRunning(false); // Animation completes
-            }, 3000);
+            }, 1000);
         }
     }, [animationRunning]);
 
@@ -74,7 +77,7 @@ const HomeScreen = ({ navigation, route }) => {
             }
             setResult(gameResult);
             setIsModalVisible(true);
-        }, 3000);
+        }, 1000);
     };
 
     const handleModalClose = () => {
@@ -85,17 +88,23 @@ const HomeScreen = ({ navigation, route }) => {
     };
 
     const handleLogout = () => {
-        // Implement logout functionality
+        // Perform logout operation here
         // For example: navigation.navigate('Login');
+        setLogoutModalVisible(false); // Close the logout modal
     };
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Pilih Salah Satu!</Text>
-            <Text style={styles.subtitle}> </Text>
+                <TouchableOpacity
+                    style={styles.settingButton}
+                    onPress={() => setLogoutModalVisible(true)}
+                >
+                    <Image source={settingImage} style={styles.logo} />
+                </TouchableOpacity>
+            <Image source={homepageImage} style={styles.image2} />
             <View style={styles.scoreContainer}>
-                <Text style={styles.scoreText}>Skor Anda : {userWins}</Text>
-                <Text style={styles.scoreText}>Skor Lawan : {computerWins}</Text>
+                <Text style={styles.scoreText}>  {userWins}</Text>
+                <Text style={styles.scoreText}>:  {computerWins}</Text>
             </View>
             <View style={styles.gameContainer}>
                 <View style={styles.buttonContainer}>
@@ -116,7 +125,7 @@ const HomeScreen = ({ navigation, route }) => {
                     <View>
                         <View style={styles.resultContainer}>
                             <View style={styles.moveContainer}>
-                                <Text>User</Text>
+                                <Text>You</Text>
                                 <Image source={getImageForMove(userMove)} style={styles.image} />
                             </View>
                             <Image source={vS} style={styles.image} />
@@ -125,12 +134,38 @@ const HomeScreen = ({ navigation, route }) => {
                                 <Image source={computerMoves[computerMoveIndex]} style={styles.image} />
                             </View>
                         </View>
-                        <Text style={[styles.resultText, styles.resultOutcomeText]}>{result}</Text>
+                        {/* <Text style={[styles.resultText, styles.resultOutcomeText]}>{result}</Text> */}
                     </View>
                 )}
-                <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-                    <Text style={styles.logoutButtonText}>Logout</Text>
-                </TouchableOpacity>
+                    {/* Logout Modal */}
+                    <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={logoutModalVisible}
+                    onRequestClose={() => setLogoutModalVisible(false)}
+                >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.modalText}>Are you sure you want to logout?</Text>
+                            <View style={styles.modalButtonContainer}>
+                                <Pressable
+                                    style={[styles.modalButton, { backgroundColor: '#AC87C5' }]}
+                                    onPress={handleLogout}
+                                >
+                                    <Text style={styles.modalButtonText}>Logout</Text>
+                                </Pressable>
+                                <Pressable
+                                    style={[styles.modalButton, { backgroundColor: '#E0AED0' }]}
+                                    onPress={() => setLogoutModalVisible(false)}
+                                >
+                                    <Text style={styles.modalButtonText}>Cancel</Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+                {/* Setting Button */}
+
             </View>
         </View>
     );
@@ -141,12 +176,21 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#FFE5E5',
         alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 10,
     },
     scoreContainer: {
         flexDirection: 'row',
-        marginBottom: 10,
+        marginBottom: 20,
+        backgroundColor: '#E0AED0',
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 30,
+        // Add shadow properties
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 3.84,
+        elevation: 10, // Android only
     },
     scoreText: {
         fontSize: 18,
@@ -171,15 +215,34 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     buttonWrapper: {
-        backgroundColor: 'white',
+        backgroundColor: '#FAF6F0',
         padding: 10,
         borderRadius: 10,
         elevation: 3,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.5,
+        shadowRadius: 3.84,
+        elevation: 10, // Android only
     },
     image: {
         width: 80,
         height: 80,
         resizeMode: 'contain',
+    },
+    image2: {
+        width: 150,
+        height: 150,
+        resizeMode: 'contain',
+        marginTop : 0,
+    },
+    logo: {
+        width: 40,
+        height: 40,
+        resizeMode: 'contain',
+        justifyContent: 'flex-end' ,
+        marginLeft : 350,
+        marginTop : 10
     },
     logoutButton: {
         backgroundColor: '#AC87C5',
@@ -208,6 +271,34 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginBottom: 20,
     },
+        // Modal styles
+        modalContainer: {
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        },
+        modalContent: {
+            backgroundColor: 'white',
+            padding: 20,
+            borderRadius: 10,
+        },
+        modalText: {
+            fontSize: 18,
+            marginBottom: 20,
+        },
+        modalButtonContainer: {
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+        },
+        modalButton: {
+            padding: 10,
+            borderRadius: 5,
+        },
+        modalButtonText: {
+            color: 'white',
+            fontWeight: 'bold',
+        },
 });
 
 export default HomeScreen;

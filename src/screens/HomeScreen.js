@@ -1,51 +1,84 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Button } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 
 import guntingImage from '../assets/scissors.png';
 import batuImage from '../assets/rock.png';
 import kertasImage from '../assets/paper.png';
 import vS from '../assets/vs.png';
-import PopUpModal2 from '../components/PopUpModal2';
-import tes1Image from '../assets/tes1.png';
+
+const getImageForMove = (move) => {
+    switch (move) {
+        case 'gunting':
+            return guntingImage;
+        case 'batu':
+            return batuImage;
+        case 'kertas':
+            return kertasImage;
+        default:
+            return null;
+    }
+};
 
 const HomeScreen = ({ navigation, route }) => {
     const [userMove, setUserMove] = useState('');
     const [computerMove, setComputerMove] = useState('');
     const [result, setResult] = useState('');
-    const [score, setScore] = useState(0); // Initialize score to 0
-    const [userWins, setUserWins] = useState(0); // Initialize userWins to 0
-    const [computerWins, setComputerWins] = useState(0); // Initialize computerWins to 0
+    const [score, setScore] = useState(0);
+    const [userWins, setUserWins] = useState(0);
+    const [computerWins, setComputerWins] = useState(0);
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [animationRunning, setAnimationRunning] = useState(false);
+    const [computerMoveIndex, setComputerMoveIndex] = useState(0);
+    const computerMoves = [guntingImage, batuImage, kertasImage];
+
+    useEffect(() => {
+        if (animationRunning) {
+            const interval = setInterval(() => {
+                setComputerMoveIndex((prevIndex) => (prevIndex + 1) % 3);
+            }, 100); // Change image every 0.1 second
+
+            // Stop animation after 3 seconds
+            setTimeout(() => {
+                clearInterval(interval);
+                setAnimationRunning(false); // Animation completes
+            }, 3000);
+        }
+    }, [animationRunning]);
 
     const handleGame = (userChoice) => {
         const choices = ['gunting', 'batu', 'kertas'];
         const computerChoice = choices[Math.floor(Math.random() * choices.length)];
 
-        let gameResult;
-        if (userChoice === computerChoice) {
-            gameResult = 'Draw';
-        } else if (
-            (userChoice === 'gunting' && computerChoice === 'kertas') ||
-            (userChoice === 'batu' && computerChoice === 'gunting') ||
-            (userChoice === 'kertas' && computerChoice === 'batu')
-        ) {
-            gameResult = 'Win';
-            setUserWins(userWins + 1); // Increment userWins by 1
-            setScore(score + 1); // Increase score by 100 for a win
-        } else {
-            gameResult = 'Lose';
-            setComputerWins(computerWins + 1); // Increment computerWins by 1
-            setScore(score - 1); // Decrease score by 50 for a loss
-        }
-
         setUserMove(userChoice);
-        setComputerMove(computerChoice);
-        setResult(gameResult);
-        setIsModalVisible(true); // Show the modal after the game result is determined
+        setComputerMove('running'); // Set computer move to a running state initially
+        setAnimationRunning(true); // Start animation
+
+        // Determine game result after 3 seconds
+        setTimeout(() => {
+            setComputerMove(computerChoice); // Set final computer move
+            let gameResult;
+            if (userChoice === computerChoice) {
+                gameResult = 'Draw';
+            } else if (
+                (userChoice === 'gunting' && computerChoice === 'kertas') ||
+                (userChoice === 'batu' && computerChoice === 'gunting') ||
+                (userChoice === 'kertas' && computerChoice === 'batu')
+            ) {
+                gameResult = 'Win';
+                setUserWins(userWins + 1);
+                setScore(score + 1);
+            } else {
+                gameResult = 'Lose';
+                setComputerWins(computerWins + 1);
+                setScore(score - 1);
+            }
+            setResult(gameResult);
+            setIsModalVisible(true);
+        }, 3000);
     };
 
     const handleModalClose = () => {
-        setIsModalVisible(false); // Close the modal
+        setIsModalVisible(false);
         setUserMove('');
         setComputerMove('');
         setResult('');
@@ -56,24 +89,9 @@ const HomeScreen = ({ navigation, route }) => {
         // For example: navigation.navigate('Login');
     };
 
-    const getImageForMove = (move) => {
-        switch (move) {
-            case 'gunting':
-                return guntingImage;
-            case 'batu':
-                return batuImage;
-            case 'kertas':
-                return kertasImage;
-            default:
-                return null;
-        }
-    };
-
     return (
         <View style={styles.container}>
-            {/* <Image source={tes1Image} style={styles.image2} /> */}
             <Text style={styles.title}>Pilih Salah Satu!</Text>
-            {/* <Text style={styles.subtitle}>Pilih salah satu!</Text> */}
             <Text style={styles.subtitle}> </Text>
             <View style={styles.scoreContainer}>
                 <Text style={styles.scoreText}>Skor Anda : {userWins}</Text>
@@ -104,7 +122,7 @@ const HomeScreen = ({ navigation, route }) => {
                             <Image source={vS} style={styles.image} />
                             <View style={styles.moveContainer}>
                                 <Text>Computer</Text>
-                                <Image source={getImageForMove(computerMove)} style={styles.image} />
+                                <Image source={computerMoves[computerMoveIndex]} style={styles.image} />
                             </View>
                         </View>
                         <Text style={[styles.resultText, styles.resultOutcomeText]}>{result}</Text>
@@ -114,7 +132,6 @@ const HomeScreen = ({ navigation, route }) => {
                     <Text style={styles.logoutButtonText}>Logout</Text>
                 </TouchableOpacity>
             </View>
-            <PopUpModal2 visible={isModalVisible} onClose={handleModalClose} result={result} />
         </View>
     );
 };
@@ -163,13 +180,6 @@ const styles = StyleSheet.create({
         width: 80,
         height: 80,
         resizeMode: 'contain',
-    },
-    image2: {
-        width: 180,
-        height: 180,
-        resizeMode: 'contain',
-        marginBottom : 10,
-        marginTop : 10,
     },
     logoutButton: {
         backgroundColor: '#AC87C5',

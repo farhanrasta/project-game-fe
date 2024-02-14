@@ -7,6 +7,7 @@ import kertasImage from '../assets/paper.png';
 import vS from '../assets/vs2.png';
 import homepageImage from '../assets/gb2.png';
 import settingImage from '../assets/logout.png';
+import restartImage from '../assets/restart.png';
 
 const getImageForMove = (move) => {
     switch (move) {
@@ -93,14 +94,25 @@ const HomeScreen = ({ navigation, route }) => {
         setLogoutModalVisible(false); // Close the logout modal
     };
 
+    const handleRestart = () => {
+        setUserWins(0);
+        setComputerWins(0);
+        setScore(0);
+    };
+
     return (
         <View style={styles.container}>
+            <View style={styles.settingContainer}>
+                <TouchableOpacity style={styles.settingButton} onPress={handleRestart}>
+                <Image source={restartImage} style={styles.logo} />
+                </TouchableOpacity>  
                 <TouchableOpacity
                     style={styles.settingButton}
                     onPress={() => setLogoutModalVisible(true)}
                 >
                     <Image source={settingImage} style={styles.logo} />
                 </TouchableOpacity>
+                </View>
             <Image source={homepageImage} style={styles.image2} />
             <View style={styles.scoreContainer}>
                 <Text style={styles.scoreText}>  {userWins}</Text>
@@ -165,7 +177,9 @@ const HomeScreen = ({ navigation, route }) => {
                     </View>
                 </Modal>
                 {/* Setting Button */}
-
+                {/* <TouchableOpacity style={styles.leaderboardButton} onPress={handleRestart}>
+                    <Text style={styles.logoutButtonText}>Leaderboard</Text>
+                </TouchableOpacity>  */}      
             </View>
         </View>
     );
@@ -203,6 +217,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         marginTop: 20,
     },
+    settingContainer: {
+        position: 'absolute',
+        flexDirection: 'row',
+        top: 20,
+        right: 20,
+    },
     moveContainer: {
         alignItems: 'center',
     },
@@ -234,23 +254,30 @@ const styles = StyleSheet.create({
         width: 150,
         height: 150,
         resizeMode: 'contain',
-        marginTop : 0,
+        marginTop : 20,
+        marginLeft: 10,
     },
     logo: {
-        width: 40,
-        height: 40,
+        width: 30,
+        height: 30,
         resizeMode: 'contain',
         justifyContent: 'flex-end' ,
-        marginLeft : 350,
-        marginTop : 10
+        marginLeft: 5,
     },
-    logoutButton: {
-        backgroundColor: '#AC87C5',
+    leaderboardButton: {
+        backgroundColor: '#E493B3',
         padding: 10,
         borderRadius: 5,
+        marginTop : 40,
+    },
+    restartButton: {
+        backgroundColor: '#E0AED0',
+        padding: 10,
+        borderRadius: 5,
+        marginTop : 40,
     },
     logoutButtonText: {
-        color: 'white',
+        color: 'black',
         fontSize: 16,
         fontWeight: 'bold',
     },

@@ -126,26 +126,9 @@ const HomeScreen = ({ navigation, route }) => {
         setResult('');
     };
 
-    const handleLogout = async () => {
+    const handleLogout = () => {
         // Perform logout operation here
         // For example: navigation.navigate('Login');
-        try {
-            const response = await axios.post(
-                'http://localhost:5000/api/auth/logout', // Sesuaikan dengan URL endpoint logout di backend Anda
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                }
-            );
-            // Clear local storage, reset states, navigate to login, etc.
-            navigation.navigate('Login');
-        } catch (error) {
-            console.error('Logout failed:', error);
-            // Handle logout failure, display error message, etc.
-        }
         setLogoutModalVisible(false); // Close the logout modal
     };
 
@@ -155,18 +138,12 @@ const HomeScreen = ({ navigation, route }) => {
         setComputerWins(0);
         console.log("ComputerWins:" , computerWins)
         console.log("Token:" , token)
-
-        try{
-            const respons = await axios.post(`http://localhost:5000/api/game/reset/${username}`, {userWins : userWins, computerWins : computerWins},{
+        const respons = await axios.post(`http://localhost:5000/api/game/reset`, {userWins : userWins, computerWins : computerWins},{
                     headers: {
                         Authorization : `Bearer ${token}`,
                         'Content-type' : 'application/json'
                     }
                 });
-                console.log('Reset response:', response.data);
-        } catch (error) {
-            console.error('Game Error', error);
-        }
 
     };
 

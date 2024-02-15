@@ -2,6 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View, Image, Button, TextInput } fr
 import React, { useState } from 'react';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import PopUpError from '../components/PopUpError';
 //import PopUpSignup from '../components/PopUpSignup';
 
 const LoginScreen = ({ navigation }) => {
@@ -16,20 +17,20 @@ const LoginScreen = ({ navigation }) => {
   const handleLogin = async () => {
     try {
       const response = await axios.post('http://localhost:5000/api/login', { username, password });
-      console.log(response);
+      console.log('status', response.status);
       setStatus(response.status);
-      setMessage(response.data.message);
-
-      if (response.status === 404 || response.status === 401) {
-        setModalVisible(true);
-        console.log('Username atau Password tidak valid');
-      }
 
       const token = response.data.token;
       setToken(token);
       console.log('Token:', token);
       navigation.navigate('Home', { token, username });
     } catch (error) {
+
+      if (error.code === "ERR_BAD_REQUEST") {
+        setModalVisible(true);
+        setMessage("Username atau Password salah")
+      }
+      
       console.error('Login Gagal', error);
     }
   };
@@ -76,6 +77,12 @@ const LoginScreen = ({ navigation }) => {
       <TouchableOpacity style={styles.signButton} onPress={() => navigation.navigate('Signup')}>
         <Text style={styles.buttonText}>{'\n'}Belum memiliki akun?</Text>
       </TouchableOpacity>
+
+      <PopUpError
+        visible={modalVisible}
+        onClose={handleCloseModal}
+        message={message}
+      />
     </View>
   );
 };

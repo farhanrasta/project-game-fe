@@ -25,6 +25,8 @@ const SignupScreen = ({navigation}) => {
             // setPassword(respons.data.password);
  
             setModalVisible(true);
+            <SplashScreen/>
+            //navigation.navigate('Splash');
         } catch (error) {
             if (error.respons && error.respons.status === 401) {
                 console.log('Signup Failed: User has already registered');
@@ -115,8 +117,9 @@ const SignupScreen = ({navigation}) => {
 
 
                 <TouchableOpacity disabled={!username || !password || !name || !retypePassword || password !== retypePassword}
-                style={styles.signbutton} onPress={() => navigation.navigate('Home')} >
+                style={styles.signbutton} onPress={() => navigation.navigate('Game')} >
                     <Text style={styles.signtext}>Sign Up</Text>
+                   
                 </TouchableOpacity>
                 
                 <PopUpError

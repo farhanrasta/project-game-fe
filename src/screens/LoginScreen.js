@@ -23,7 +23,8 @@ const LoginScreen = ({ navigation }) => {
       const token = response.data.token;
       setToken(token);
       console.log('Token:', token);
-      navigation.navigate('Home', { token, username });
+      //navigation.navigate('Splash');
+      navigation.navigate('Game', { token, username });
     } catch (error) {
 
       if (error.code === "ERR_BAD_REQUEST") {
@@ -41,7 +42,7 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.hiText}>Let's get started!! {'\n'}</Text>
+      <Text style={styles.hiText}> Yuk main!!! {'\n'}</Text>
       <Image
         source={require('../assets/gb1.png')} // Adjust the path based on your project structure
         style={styles.logo}

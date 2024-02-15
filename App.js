@@ -7,6 +7,7 @@ import HomeScreen from './src/screens/HomeScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import SignupScreen from './src/screens/SignupScreen';
 import PopUpModal from './src/components/PopUpModal';
+import GameScreen from './src/screens/GameScreen';
 import Leaderboard  from './src/screens/Leaderboard';
 
 const Stack = createStackNavigator();
@@ -14,10 +15,11 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Login'>
-        {/* <Stack.Screen name="Home" component={HomeScreen}/>
+      <Stack.Navigator initialRouteName='Home'>
+        <Stack.Screen name="Home" component={HomeScreen}/>
         <Stack.Screen name="Login" component={LoginScreen}/>
-        <Stack.Screen name="Signup" component={SignupScreen}/> */}
+        <Stack.Screen name="Signup" component={SignupScreen}/>
+        <Stack.Screen name="Game" component={GameScreen}/>
         <Stack.Screen name="Leaderboard" component={Leaderboard}/>
       </Stack.Navigator>
     </NavigationContainer>

@@ -3,20 +3,23 @@ import React, { useEffect, useState } from 'react';
 import { TextInput,View, Modal, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 
-const PopUpSignup = ({ visible, onClose, status, message }) => {
+const PopUpError = ({ visible, onClose, message }) => {
   
     return (
     <Modal
-      animationType="slide"
+      animationType="fade"
       transparent={true}
       visible={visible}
       onRequestClose={onClose}
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text>Status: {status}</Text>
           <Text>{message}</Text>
-          <View style={styles.button}> <Button title="Close" onPress={onClose}/> </View>
+          <View style={styles.button}> 
+            <TouchableOpacity>
+              <Text onPress={onClose} style={styles.okText}>OK</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </Modal>
@@ -50,10 +53,19 @@ const styles = StyleSheet.create({
   },
   button: {
     padding: 10,
-    paddingTop: 20,
+    borderRadius: 5,
+    width: 70,
     alignItems: 'center',
+    marginTop: 20,
     justifyContent: 'center',
+    backgroundColor:'#AC87C5'
+  },
+  okText: {
+    color: '#FFE5E5',
+    alignItems: 'center',
+    fontWeight: 'bold',
+    position: 'relative'
   },
 });
 
-export default PopUpSignup;
+export default PopUpError;

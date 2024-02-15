@@ -5,7 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import React, {useState} from 'react';
 import axios from 'axios';
-import PopUpSignup from '../components/PopUpSignup';
+import PopUpError from '../components/PopUpError';
 
 const SignupScreen = ({navigation}) => {
     const [username, setUserName] = useState('');
@@ -119,12 +119,12 @@ const SignupScreen = ({navigation}) => {
                     <Text style={styles.signtext}>Sign Up</Text>
                 </TouchableOpacity>
                 
-                <PopUpSignup  
-                    visible={modalVisible} 
-                    onClose={handleCloseModal} 
-                    status={status} 
-                    message={message}
-                    />
+                <PopUpError
+                  visible={modalVisible}
+                  onClose={handleCloseModal}
+                  status={status}
+                  message={message}
+                />
             </View>
         </View>
     );

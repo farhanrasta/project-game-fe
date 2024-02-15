@@ -138,18 +138,12 @@ const HomeScreen = ({ navigation, route }) => {
         setComputerWins(0);
         console.log("ComputerWins:" , computerWins)
         console.log("Token:" , token)
-
-        try{
-            const respons = await axios.post(`http://localhost:5000/api/game/reset/${username}`, {userWins : userWins, computerWins : computerWins},{
+        const respons = await axios.post(`http://localhost:5000/api/game/reset`, {userWins : userWins, computerWins : computerWins},{
                     headers: {
                         Authorization : `Bearer ${token}`,
                         'Content-type' : 'application/json'
                     }
                 });
-                console.log('Reset response:', response.data);
-        } catch (error) {
-            console.error('Game Error', error);
-        }
 
     };
 

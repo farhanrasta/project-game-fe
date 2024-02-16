@@ -72,7 +72,7 @@ const HomeScreen = ({ navigation, route }) => {
         setTimeout( async () => {
             setComputerMove(computerMoveIndex); // Set final computer move
             try{
-                const respons = await axios.post(`http://localhost:5000/api/game/${username}`, {userMove : userChoice, computerMove: computerChoice},{
+                const respons = await axios.post(`https://joey-pet-minnow.ngrok-free.app/api/game/${username}`, {userMove : userChoice, computerMove: computerChoice},{
                     headers: {
                         Authorization : `Bearer ${token}`,
                         'Content-type' : 'application/json'
@@ -131,7 +131,7 @@ const HomeScreen = ({ navigation, route }) => {
         // For example: navigation.navigate('Login');
         try {
             const response = await axios.post(
-                'http://localhost:5000/api/auth/logout', // Sesuaikan dengan URL endpoint logout di backend Anda
+                `https://joey-pet-minnow.ngrok-free.app/api/logout/${username}`, // Sesuaikan dengan URL endpoint logout di backend Anda
                 {},
                 {
                     headers: {
@@ -157,7 +157,7 @@ const HomeScreen = ({ navigation, route }) => {
         console.log("Token:" , token)
 
         try{
-            const respons = await axios.post(`http://localhost:5000/api/game/reset/${username}`, {userWins : userWins, computerWins : computerWins},{
+            const respons = await axios.post(`https://joey-pet-minnow.ngrok-free.app/api/game/reset/${username}`, {userWins : userWins, computerWins : computerWins},{
                     headers: {
                         Authorization : `Bearer ${token}`,
                         'Content-type' : 'application/json'

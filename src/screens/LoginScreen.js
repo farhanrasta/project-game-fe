@@ -23,6 +23,10 @@ const LoginScreen = ({ navigation }) => {
       const token = response.data.token;
       setToken(token);
       console.log('Token:', token);
+
+      setUserName('');
+      setPassword('');
+
       //navigation.navigate('Splash');
       navigation.navigate('Game', { token, username });
     } catch (error) {

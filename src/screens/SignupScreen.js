@@ -25,7 +25,10 @@ const SignupScreen = ({navigation}) => {
             // setUserName(respons.data.username);
             // setPassword(respons.data.password);
  
+
+//             setModalVisible(true);
             navigation.navigate('Login');
+
         } catch (error) {
             if (error.respons && error.respons.status === 401) {
                 console.log('Signup Failed: User has already registered');
@@ -118,6 +121,7 @@ const SignupScreen = ({navigation}) => {
                 <TouchableOpacity disabled={!username || !password || !name || !retypePassword || password !== retypePassword}
                 style={styles.signbutton} onPress={handleSignUp} >
                     <Text style={styles.signtext}>Sign Up</Text>
+                   
                 </TouchableOpacity>
                
                 <PopUpError

@@ -20,7 +20,7 @@ const SignupScreen = ({navigation}) => {
     const handleSignUp = async () => {
       console.log("apa gitu")
         try{
-            const respons = await axios.post('http://localhost:5000/api/signup', {username, password, name, retypePassword});
+            const respons = await axios.post('https://joey-pet-minnow.ngrok-free.app/api/signup', {username, password, name, retypePassword});
             console.log('respons' ,respons);
             // setUserName(respons.data.username);
             // setPassword(respons.data.password);

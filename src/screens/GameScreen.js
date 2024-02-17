@@ -25,7 +25,7 @@ const getImageForMove = (move) => {
     }
 };
 
-const HomeScreen = ({ navigation, route }) => {
+const GameScreen = ({ navigation, route }) => {
     const [userMove, setUserMove] = useState('');
     const [computerMove, setComputerMove] = useState('');
     const [result, setResult] = useState('');
@@ -412,4 +412,4 @@ const styles = StyleSheet.create({
         },
 });
 
-export default HomeScreen;
+export default GameScreen;

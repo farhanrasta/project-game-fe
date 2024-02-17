@@ -6,6 +6,7 @@ import bronzemedal from '../assets/bronzemedal.png'
 import gb1 from '../assets/gb1.png'
 import champion from '../assets/champion1.png'
 import Brodille from '../assets/Brodille-Regular.ttf'
+import axios from 'axios';
 
 const Leaderboard = ({ route }) => {
   const { token, username } = route.params;
@@ -19,17 +20,20 @@ const Leaderboard = ({ route }) => {
 
   const fetchLeaderboardData = async () => {
     try {
-      const response = await fetch(`https://joey-pet-minnow.ngrok-free.app/api/game/leaderboard/${username}`, {
-        method: 'POST',
+      const response = await axios.get(`https://joey-pet-minnow.ngrok-free.app/api/game/leaderboard/${username}`, {
         headers: {
-          'X-API-TOKEN': token,
-          'Content-Type': 'application/json'
-        }
-      });
-      if (!response.ok) {
-        throw new Error('Failed to fetch leaderboard data');
+          Authorization : `Bearer ${token}`,
+          'Content-type' : 'application/json'
       }
-      const data = await response.json();
+      });
+
+      // if (!response.ok) {
+      //   throw new Error('Failed to fetch leaderboard data');
+      // }
+
+      const data = response.data;
+      console.log("data", data);
+
       setLeaderboardData(data);
       setLoading(false);
     } catch (error) {
@@ -38,6 +42,10 @@ const Leaderboard = ({ route }) => {
       setLoading(false);
     }
   };
+  
+  useEffect(() => {
+    fetchLeaderboardData();
+  }, []);
 
   const rankImages = [goldmedal, silvermedal, bronzemedal];
   const rankColors = ['#FFD700', '#C0C0C0', '#CD7F32'];

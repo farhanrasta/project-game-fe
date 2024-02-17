@@ -338,10 +338,9 @@ const styles = StyleSheet.create({
         marginLeft: 5,
     },
     leaderboardButton: {
-        backgroundColor: '#E493B3',
         padding: 10,
         borderRadius: 5,
-        marginTop : 40,
+        marginTop : -20,
         marginRight : 275,
     },
     restartButton: {

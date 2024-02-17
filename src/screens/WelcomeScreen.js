@@ -28,7 +28,7 @@ const ProfileScreen = ({ route }) => {
   }, []);
 
   const handleStartGame = () => {
-    navigation.navigate('Game'); // Navigate to GameScreen
+    navigation.navigate('Game',{ username }); // Navigate to GameScreen
   };
 
   return (

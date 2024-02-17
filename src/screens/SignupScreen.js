@@ -83,8 +83,7 @@ const SignupScreen = ({ navigation }) => {
           // Handle other errors
       }
   };
-  
-    
+
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
     };
@@ -148,7 +147,7 @@ const SignupScreen = ({ navigation }) => {
                         placeholderTextColor="#FFE5E5"
                         value={retypePassword}
                         onChangeText={setRetypePassword}
-                        secureTextEntry={!showRetypePassword}
+                        secureTextEntry={!showPassword}
                     />
 
                 </View>
@@ -219,6 +218,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: 300,
         alignItems: 'center',
+        justifyContent : 'center',
     },
     input: {
         width: 300,

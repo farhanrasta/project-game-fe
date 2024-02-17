@@ -33,7 +33,8 @@ const HomeScreen = ({ navigation, route }) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [animationRunning, setAnimationRunning] = useState(false);
     const [computerMoveIndex, setComputerMoveIndex] = useState(0);
-    const computerMoves = [kertasImage, guntingImage, batuImage];
+    const computerMoves = [guntingImage, batuImage, kertasImage];
+    const choices = ['gunting', 'batu', 'kertas'];
     const [logoutModalVisible, setLogoutModalVisible] = useState(false);
 
     const { username, token } = route.params;
@@ -41,7 +42,8 @@ const HomeScreen = ({ navigation, route }) => {
     useEffect(() => {
         if (animationRunning) {
             const interval = setInterval(() => {
-                const index = (prevIndex) => (prevIndex + 1) % 3;
+                // const index = (prevIndex) => (prevIndex + 1) % 3;
+                const index = Math.floor(Math.random() * computerMoves.length);
                 setComputerMoveIndex(index);
                 console.log('computerMoveIndex', computerMoveIndex);
                 console.log('computerMoves', computerMoves);
@@ -53,18 +55,30 @@ const HomeScreen = ({ navigation, route }) => {
                 setAnimationRunning(false); // Animation completes
             }, 1000);
         }
-    }, [animationRunning]);
+    }, [animationRunning, computerMoves.length]);
+
+    useEffect(() => {
+        console.log('Current computerMoveIndex:', computerMoveIndex);
+    }, [computerMoveIndex]);
+    
+    useEffect(() => {
+        console.log('Current computerChoice:', computerMoves[computerMoveIndex]);
+    }, [computerMoves, computerMoveIndex]);
 
     const handleRestart = async () => {
-
+        console.log("handleRestart");
+        setUserWins(0);
+        setComputerWins(0)
         try{
-            const respons = await axios.post(`https://joey-pet-minnow.ngrok-free.app/api/game/reset/${username}`, {userWins : userWins, computerWins : computerWins},{
+            const respons = await axios.post(
+                `https://joey-pet-minnow.ngrok-free.app/api/game/reset/${username}`, {}, 
+                {
                     headers: {
                         Authorization : `Bearer ${token}`,
-                        'Content-type' : 'application/json'
+                        'Content-Type' : 'application/json'
                     }
                 });
-                console.log('Reset response:', response.data);
+                console.log('Reset response:', respons.data);
         } catch (error) {
             console.error('Game Error', error);
         }
@@ -75,8 +89,7 @@ const HomeScreen = ({ navigation, route }) => {
     const handleGame = (userChoice) => {
         console.log('userChoice', userChoice);
 
-        console.log('computerMoveIndex', computerMoveIndex);
-        const choices = ['gunting', 'batu', 'kertas'];
+        console.log('computerIndex', computerMoveIndex);
         const computerChoice = choices[computerMoveIndex];
 
         setUserMove(userChoice);
@@ -86,7 +99,7 @@ const HomeScreen = ({ navigation, route }) => {
 
         // Determine game result after 3 seconds
         setTimeout( async () => {
-            setComputerMove(computerMoveIndex); // Set final computer move
+            // setComputerMove(computerMoveIndex); // Set final computer move
             try{
                 const respons = await axios.post(`https://joey-pet-minnow.ngrok-free.app/api/game/${username}`, {userMove : userChoice, computerMove: computerChoice},{
                     headers: {

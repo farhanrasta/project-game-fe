@@ -10,7 +10,9 @@ import homepageImage from '../assets/gb2.png';
 import settingImage from '../assets/logout.png';
 import restartImage from '../assets/restart.png';
 import PopUpModal from '../components/PopUpModal';
+import PopUpLogout from '../components/PopUpLogout';
 import leaderboardImage from '../assets/leaderboard.png';
+
 
 const getImageForMove = (move) => {
     switch (move) {
@@ -25,7 +27,7 @@ const getImageForMove = (move) => {
     }
 };
 
-const HomeScreen = ({ navigation, route }) => {
+const GameScreen = ({ navigation, route }) => {
     const [userMove, setUserMove] = useState('');
     const [computerMove, setComputerMove] = useState('');
     const [result, setResult] = useState('');
@@ -39,6 +41,10 @@ const HomeScreen = ({ navigation, route }) => {
     const [logoutModalVisible, setLogoutModalVisible] = useState(false);
 
     const { username, token } = route.params;
+
+    useEffect(() => {
+        navigation.setParams({ toggleModal: () => setLogoutModalVisible(true) });
+    }, false);
 
     useEffect(() => {
         if (animationRunning) {
@@ -223,33 +229,13 @@ const HomeScreen = ({ navigation, route }) => {
                         result={result}
                     /> */}
                     {/* Logout Modal */}
-
-                    <Modal
-                    animationType="slide"
-                    transparent={true}
+                    <PopUpLogout 
                     visible={logoutModalVisible}
-                    onRequestClose={() => setLogoutModalVisible(false)}
-                >
-                    <View style={styles.modalContainer}>
-                        <View style={styles.modalContent}>
-                            <Text style={styles.modalText}>Are you sure you want to logout?</Text>
-                            <View style={styles.modalButtonContainer}>
-                                <Pressable
-                                    style={[styles.modalButton, { backgroundColor: '#AC87C5' }]}
-                                    onPress={handleLogout}
-                                >
-                                    <Text style={styles.modalButtonText}>Logout</Text>
-                                </Pressable>
-                                <Pressable
-                                    style={[styles.modalButton, { backgroundColor: '#E0AED0' }]}
-                                    onPress={() => setLogoutModalVisible(false)}
-                                >
-                                    <Text style={styles.modalButtonText}>Cancel</Text>
-                                </Pressable>
-                            </View>
-                        </View>
-                    </View>
-                </Modal>
+                    onClose={() => setLogoutModalVisible(false)}
+                    handleLogout={handleLogout}
+                    />
+
+                    
                 {/* Setting Button */}
                 {/* <TouchableOpacity style={styles.leaderboardButton} onPress={handleRestart}>
                     <Text style={styles.logoutButtonText}>Leaderboard</Text>
@@ -258,6 +244,10 @@ const HomeScreen = ({ navigation, route }) => {
         </View>
     );
 };
+
+GameScreen.navigationOptions =  {
+    headerLeft: () => null
+  };
 
 const styles = StyleSheet.create({
     container: {
@@ -382,6 +372,11 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginBottom: 20,
     },
+    settingsButton: {
+        marginRight: 10,
+        color: 'blue',
+        fontSize: 16,
+    },
         // Modal styles
         modalContainer: {
             flex: 1,
@@ -412,4 +407,4 @@ const styles = StyleSheet.create({
         },
 });
 
-export default HomeScreen;
+export default GameScreen;

@@ -1,33 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet,Image, TouchableOpacity, navigation } from 'react-native';
+import { View, Text, StyleSheet,Image, TouchableOpacity } from 'react-native';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 import gb2 from '../assets/gb2.png'
 
 const ProfileScreen = ({ route }) => {
-  const [username, setUsername] = useState('');
+  const { username } = route.params;
+  const [greeting, setGreeting] = useState('');
+  const navigation = useNavigation(); // Get navigation object
 
   useEffect(() => {
-    // Fetch username from API
-    // const { token } = route.params;
-
-    const fetchUsername = async () => {
+    const fetchGreeting = async () => {
       try {
-        const response = await axios.get('https://jsonplaceholder.typicode.com/', {
-        //   headers: {
-        //     Authorization: `Bearer ${token}`,
-        //   },
+        const response = await axios.get(`https://joey-pet-minnow.ngrok-free.app/api/login`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
-        setUsername(response.data.username);
+        setGreeting(response.data.greeting);
       } catch (error) {
-        console.error('Error fetching username:', error);
+        console.error('Error fetching greeting:', error);
+        Alert.alert('Error', 'Failed to fetch greeting');
       }
     };
 
-    fetchUsername();
-  }, [route.params]);
+    fetchGreeting();
+  }, []);
 
   const handleStartGame = () => {
-    navigation.navigate('Game', { username });
+    navigation.navigate('Game'); // Navigate to GameScreen
   };
 
   return (

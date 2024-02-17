@@ -28,7 +28,7 @@ const LoginScreen = ({ navigation }) => {
       setPassword('');
 
       //navigation.navigate('Splash');
-      navigation.navigate('Game', { token, username });
+      navigation.navigate('Welcome', { token, username });
     } catch (error) {
 
       if (error.code === "ERR_BAD_REQUEST") {

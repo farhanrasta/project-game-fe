@@ -2,7 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View, Image, Button, TextInput } fr
 import React, { useState } from 'react';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import PopUpError from '../components/PopUpError';
+import PopUpError from '../components/PopUpLogin';
 //import PopUpSignup from '../components/PopUpSignup';
 
 const LoginScreen = ({ navigation }) => {

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, Image, View, TextInput, TouchableOpacity, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
-import PopUpError from '../components/PopUpError';
+import PopUpError from '../components/PopUpLogin';
 
 const SignupScreen = ({ navigation }) => {
     const [username, setUserName] = useState('');

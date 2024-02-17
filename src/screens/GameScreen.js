@@ -80,7 +80,7 @@ const GameScreen = ({ navigation, route }) => {
         setUserWins(0);
         setComputerWins(0)
         try{
-            const respons = await axios.post(
+            const response = await axios.post(
                 `https://joey-pet-minnow.ngrok-free.app/api/game/reset/${username}`, {}, 
                 {
                     headers: {
@@ -88,7 +88,7 @@ const GameScreen = ({ navigation, route }) => {
                         'Content-Type' : 'application/json'
                     }
                 });
-                console.log('Reset response:', respons.data);
+                console.log('Reset ee:', response.data);
         } catch (error) {
             console.error('Game Error', error);
         }
@@ -111,22 +111,22 @@ const GameScreen = ({ navigation, route }) => {
         setTimeout( async () => {
             // setComputerMove(computerMoveIndex); // Set final computer move
             try{
-                const respons = await axios.post(`https://joey-pet-minnow.ngrok-free.app/api/game/${username}`, {userMove : userChoice, computerMove: computerChoice},{
+                const response = await axios.post(`https://joey-pet-minnow.ngrok-free.app/api/game/${username}`, {userMove : userChoice, computerMove: computerChoice},{
                     headers: {
                         Authorization : `Bearer ${token}`,
                         'Content-type' : 'application/json'
                     }
                 });
 
-                setUserMove(respons.data.userMove);
-                console.log("userMOOOOOVE:" ,respons.data)
-                setComputerMove(respons.data.computerMove);
-                setResult(respons.data.result);
-                setUserWins(respons.data.userWins);
-                setComputerWins(respons.data.computerWins);
+                setUserMove(response.data.userMove);
+                console.log("userMOOOOOVE:" ,response.data)
+                setComputerMove(response.data.computerMove);
+                setResult(response.data.result);
+                setUserWins(response.data.userWins);
+                setComputerWins(response.data.computerWins);
     
-                console.log("Game Result Alert:", `User Move: ${respons.data.userMove}\nComputer Move: ${respons.data.computerMove}\nResult: ${respons.data.result}`);
-                console.log("Game Result Alert:", `User Wins: ${respons.data.userWins}\nComputer Wins: ${respons.data.computerWins}`);
+                console.log("Game Result Alert:", `User Move: ${response.data.userMove}\nComputer Move: ${response.data.computerMove}\nResult: ${response.data.result}`);
+                console.log("Game Result Alert:", `User Wins: ${response.data.userWins}\nComputer Wins: ${response.data.computerWins}`);
                 setIsModalVisible(true);
             
             } catch (error) {
@@ -146,7 +146,7 @@ const GameScreen = ({ navigation, route }) => {
         // Perform logout operation here
         // For example: navigation.navigate('Login');
         try {
-            const respons = await axios.delete(
+            const response = await axios.delete(
                 `https://joey-pet-minnow.ngrok-free.app/api/logout/${username}`, // Sesuaikan dengan URL endpoint logout di backend Anda
                 {
                     headers: {
@@ -156,7 +156,7 @@ const GameScreen = ({ navigation, route }) => {
                 }
             );
             // Clear local storage, reset states, navigate to login, etc.
-            if (respons.status === 200) {
+            if (response.status === 200) {
                 navigation.navigate('Login');
                 console.log('Logout Success');
             } else {

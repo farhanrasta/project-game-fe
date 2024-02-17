@@ -3,22 +3,23 @@ import { View, Text, StyleSheet,Image, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import gb2 from '../assets/gb2.png'
-import atmaMedium from '../assets/Atma-Medium.ttf';
 
 const ProfileScreen = ({ route }) => {
-  const { username } = route.params;
+  const { username, token } = route.params;
   const [greeting, setGreeting] = useState('');
   const navigation = useNavigation(); // Get navigation object
+  const [name, setName] = useState('');
 
   useEffect(() => {
     const fetchGreeting = async () => {
       try {
-        const response = await axios.get(`https://joey-pet-minnow.ngrok-free.app/api/login`, {
+        const response = await axios.get(`https://joey-pet-minnow.ngrok-free.app/api/login/${username}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         setGreeting(response.data.greeting);
+        setName(response.data.name);
       } catch (error) {
         console.error('Error fetching greeting:', error);
         Alert.alert('Error', 'Failed to fetch greeting');
@@ -29,13 +30,14 @@ const ProfileScreen = ({ route }) => {
   }, []);
 
   const handleStartGame = () => {
-    navigation.navigate('Game',{ username }); // Navigate to GameScreen
+    navigation.navigate('Game',{ username, token }); // Navigate to GameScreen
+  
   };
 
   return (
     <View style={styles.container}>
         <Image source={gb2} style={styles.image} />
-      <Text style={styles.text}>Hi, {username}</Text>
+      <Text style={styles.text}>Hi, {name}</Text>
       <Text style={styles.text}>Are you ready? </Text>
       <TouchableOpacity style={styles.button} onPress={handleStartGame}>
         <Text style={styles.buttonText}>Let's Start</Text>
@@ -54,7 +56,6 @@ const styles = StyleSheet.create({
       fontSize: 24,
       fontWeight: 'bold',
       marginBottom: 20,
-      fontFamily : 'atmaMedium'
     },
     button: {
       backgroundColor: '#E493B3',

@@ -8,6 +8,7 @@ import LoginScreen from './src/screens/LoginScreen';
 import SignupScreen from './src/screens/SignupScreen';
 import GameScreen from './src/screens/GameScreen';
 import Leaderboard  from './src/screens/Leaderboard';
+import Welcome from './src/screens/WelcomeScreen';
 
 
 const Stack = createStackNavigator();
@@ -19,6 +20,7 @@ const App = () => {
       <Stack.Navigator initialRouteName='Home'>
         <Stack.Screen name="Home" component={HomeScreen}/>
         <Stack.Screen name="Login" component={LoginScreen}/>
+        <Stack.Screen name="Welcome" component={Welcome}/>
         <Stack.Screen name="Signup" component={SignupScreen}/>
         <Stack.Screen name="Leaderboard" component={Leaderboard} />
         <Stack.Screen name="Game" component={GameScreen} options={{ headerLeft: null }}/>

@@ -11,6 +11,8 @@ import settingImage from '../assets/logout.png';
 import restartImage from '../assets/restart.png';
 import PopUpModal from '../components/PopUpModal';
 import PopUpLogout from '../components/PopUpLogout';
+import leaderboardImage from '../assets/leaderboard.png';
+
 
 const getImageForMove = (move) => {
     switch (move) {
@@ -168,6 +170,9 @@ const GameScreen = ({ navigation, route }) => {
     return (
         <View style={styles.container}>
             <View style={styles.settingContainer}>
+            <TouchableOpacity style={styles.leaderboardButton} onPress={handleRestart}>
+                <Image source={leaderboardImage} style={styles.logo2} />
+                </TouchableOpacity> 
                 <TouchableOpacity style={styles.settingButton} onPress={handleRestart}>
                 <Image source={restartImage} style={styles.logo} />
                 </TouchableOpacity>  
@@ -265,6 +270,15 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 10, // Android only
     },
+    logo2: {
+        width: 40,
+        height: 40,
+        resizeMode: 'contain',
+        justifyContent: 'flex-end' ,
+        marginLeft: 15,
+        padding: 20,
+        borderRadius: 15,
+    },
     scoreText: {
         fontSize: 18,
         fontWeight: 'bold',
@@ -328,6 +342,7 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 5,
         marginTop : 40,
+        marginRight : 275,
     },
     restartButton: {
         backgroundColor: '#E0AED0',

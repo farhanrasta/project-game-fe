@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, Image, View, TextInput, TouchableOpacity, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
-import PopUpError from '../components/PopUpLogin';
+import PopUpSignup from '../components/PopUpSignup';
 
 const SignupScreen = ({ navigation }) => {
     const [username, setUserName] = useState('');
@@ -12,7 +12,7 @@ const SignupScreen = ({ navigation }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [showRetypePassword, setShowRetypePassword] = useState(false);
 
-    const [modalVisible, setModalVisible] = useState(false);
+    const [errorModalVisible, setErrorModalVisible] = useState(false);
     const [successModalVisible, setSuccessModalVisible] = useState(false);
     const [status, setStatus] = useState(500);
     const [message, setMessage] = useState('');
@@ -34,21 +34,19 @@ const SignupScreen = ({ navigation }) => {
           // Check if the password meets the minimum length requirement
           if (password.length < 6) {
               // Show error popup if the password is less than 6 characters
-              setModalVisible(true);
+              setErrorModalVisible(true);
               setMessage('Password minimal harus 6 karakter');
-              return;
           } else {
               // Reset error popup if the password meets the requirement
-              setModalVisible(false);
+              setErrorModalVisible(false);
               setMessage('');
           }
   
           // Check if password and retype password match
           if (password !== retypePassword) {
               // Show error popup if passwords do not match
-              setModalVisible(true);
+              setErrorModalVisible(true);
               setMessage('Password harus sama');
-              return;
           }
   
           // Check if the username already exists
@@ -57,18 +55,17 @@ const SignupScreen = ({ navigation }) => {
   
           if (response.data && response.data.error === 'Username already exists') {
               // Show error popup if the username already exists
-              setModalVisible(true);
+              setErrorModalVisible(true);
               setMessage('Username sudah pernah dibuat');
-              return;
           }
   
           // If everything is successful, show the success modal and navigate to login screen
           setSuccessModalVisible(true); // Set success modal visible
-          setModalVisible(false); // Hide error popup if sign up is successful
+          setErrorModalVisible(false); // Hide error popup if sign up is successful
           navigation.navigate('LoginScreen'); // Moved this line to after setting success modal visible
       } catch (error) {
           console.log(error.response);
-          setModalVisible(true);
+          setErrorModalVisible(true);
           console.error('Signup Failed', error);
           // Handle other errors
       }
@@ -150,18 +147,18 @@ const SignupScreen = ({ navigation }) => {
                     <Text style={styles.signtext}>Sign Up</Text>
                 </TouchableOpacity>
 
-                <PopUpError
-                    errorVisible={modalVisible} // Add a new prop for error popup visibility
+                <PopUpSignup
+                    errorVisible={errorModalVisible} // Add a new prop for error popup visibility
                     successVisible={successModalVisible} // Add a new prop for success popup visibility
                     onClose={() => {
-                        setModalVisible(false);
+                        setErrorModalVisible(false);
                         setSuccessModalVisible(false);
                     }}
                     status={status}
                     message={message}
                 />      
 
-                <Modal
+                {/* <Modal
                     animationType="fade"
                     transparent={true}
                     visible={successModalVisible}
@@ -178,7 +175,7 @@ const SignupScreen = ({ navigation }) => {
                             </TouchableOpacity>
                         </View>
                     </View>
-                </Modal>
+                </Modal> */}
             </View>
         </View>
     );

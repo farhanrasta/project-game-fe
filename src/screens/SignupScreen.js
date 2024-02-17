@@ -36,36 +36,49 @@ const SignupScreen = ({ navigation }) => {
               // Show error popup if the password is less than 6 characters
               setErrorModalVisible(true);
               setMessage('Password minimal harus 6 karakter');
-          } else {
-              // Reset error popup if the password meets the requirement
-              setErrorModalVisible(false);
-              setMessage('');
-          }
+              return;
+          } 
+        //   else {
+        //       // Reset error popup if the password meets the requirement
+        //       setErrorModalVisible(false);
+        //       setMessage('');
+        //       return;
+        //   }
   
           // Check if password and retype password match
           if (password !== retypePassword) {
               // Show error popup if passwords do not match
+              console.log(password, "password");
+              console.log(retypePassword, "password22");
               setErrorModalVisible(true);
               setMessage('Password harus sama');
+              return;
           }
   
           // Check if the username already exists
           const response = await axios.post('http://localhost:5000/api/signup', { username, password, name, retypePassword });
           console.log('response', response);
   
-          if (response.data && response.data.error === 'Username already exists') {
-              // Show error popup if the username already exists
-              setErrorModalVisible(true);
-              setMessage('Username sudah pernah dibuat');
-          }
+        //   if (response.data && response.data.error === 'Username already exists') {
+        //       // Show error popup if the username already exists
+        //       setErrorModalVisible(true);
+        //       setMessage('Username sudah pernah dibuat');
+        //       return;
+        //   }
   
           // If everything is successful, show the success modal and navigate to login screen
           setSuccessModalVisible(true); // Set success modal visible
           setErrorModalVisible(false); // Hide error popup if sign up is successful
           navigation.navigate('LoginScreen'); // Moved this line to after setting success modal visible
       } catch (error) {
-          console.log(error.response);
-          setErrorModalVisible(true);
+          console.log(error.code);
+          if (error.code==='ERR_NETWORK') {
+            // Show error popup if the username already exists
+            setErrorModalVisible(true);
+            setMessage('Username sudah pernah dibuat');
+            return;
+        }
+          //setErrorModalVisible(true);
           console.error('Signup Failed', error);
           // Handle other errors
       }

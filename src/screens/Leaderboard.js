@@ -6,9 +6,9 @@ import bronzemedal from '../assets/bronzemedal.png'
 import gb1 from '../assets/gb1.png'
 import champion from '../assets/champion1.png'
 import Brodille from '../assets/Brodille-Regular.ttf'
-import axios from 'axios';
 
-const Leaderboard = (route) => {
+const Leaderboard = ({ route }) => {
+  const { token, username } = route.params;
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -19,14 +19,13 @@ const Leaderboard = (route) => {
 
   const fetchLeaderboardData = async () => {
     try {
-      const response = await fetch(`https://joey-pet-minnow.ngrok-free.app/api/game/leaderboard/${username}`,
-    //   {
-    //     headers: {
-    //         Authorization: `Bearer ${token}`,
-    //         'Content-Type': 'application/json'
-    //     }
-    // }
-    );
+      const response = await fetch(`https://joey-pet-minnow.ngrok-free.app/api/game/leaderboard/${username}`, {
+        method: 'POST',
+        headers: {
+          'X-API-TOKEN': token,
+          'Content-Type': 'application/json'
+        }
+      });
       if (!response.ok) {
         throw new Error('Failed to fetch leaderboard data');
       }
@@ -45,12 +44,12 @@ const Leaderboard = (route) => {
 
   const renderLeaderboardItem = ({ item, index }) => (
     <View style={styles.itemContainer}>
-      <View style={[styles.rankContainer,{ backgroundColor: index < 3 ? rankColors[index] : '#AC87C5' }]}>
-      {index < 3 ? (
-        <Image source={rankImages[index]} style={styles.rankImage} />
-      ) : (
-        <Text style={styles.rank}>{index + 1}</Text>
-      )}
+      <View style={[styles.rankContainer, { backgroundColor: index < 3 ? rankColors[index] : '#AC87C5' }]}>
+        {index < 3 ? (
+          <Image source={rankImages[index]} style={styles.rankImage} />
+        ) : (
+          <Text style={styles.rank}>{index + 1}</Text>
+        )}
       </View>
       <View style={styles.usernameContainer}>
         <Text style={styles.username}>{item.name}</Text>
@@ -88,7 +87,7 @@ const Leaderboard = (route) => {
         renderItem={renderLeaderboardItem}
         keyExtractor={(item, index) => index.toString()}
       />
-       <Image source={gb1} style={styles.Image} />
+      <Image source={gb1} style={styles.Image} />
     </View>
   );
 };

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, Modal,Pressable } from 'react-native';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
+
 
 import guntingImage from '../assets/scissors.png';
 import batuImage from '../assets/rock.png';
@@ -12,6 +14,7 @@ import restartImage from '../assets/restart.png';
 import PopUpModal from '../components/PopUpModal';
 import PopUpLogout from '../components/PopUpLogout';
 import leaderboardImage from '../assets/leaderboard.png';
+import atmaMedium from '../assets/Atma-Medium.ttf';
 
 
 const getImageForMove = (move) => {
@@ -166,11 +169,15 @@ const GameScreen = ({ navigation, route }) => {
         setLogoutModalVisible(false); // Close the logout modal
     };
 
+    const handleLeaderboardNavigation = () => {
+        navigation.navigate('Leaderboard',{username, token}); // Navigate to the leaderboard page
+    };
+
     
     return (
         <View style={styles.container}>
             <View style={styles.settingContainer}>
-            <TouchableOpacity style={styles.leaderboardButton} onPress={handleRestart}>
+            <TouchableOpacity style={styles.leaderboardButton} onPress={handleLeaderboardNavigation}>
                 <Image source={leaderboardImage} style={styles.logo2} />
                 </TouchableOpacity> 
                 <TouchableOpacity style={styles.settingButton} onPress={handleRestart}>
@@ -338,10 +345,9 @@ const styles = StyleSheet.create({
         marginLeft: 5,
     },
     leaderboardButton: {
-        backgroundColor: '#E493B3',
         padding: 10,
         borderRadius: 5,
-        marginTop : 40,
+        marginTop : -20,
         marginRight : 275,
     },
     restartButton: {

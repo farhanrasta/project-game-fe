@@ -3,6 +3,7 @@ import { View, Text, StyleSheet,Image, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import gb2 from '../assets/gb2.png'
+import atmaMedium from '../assets/Atma-Medium.ttf';
 
 const ProfileScreen = ({ route }) => {
   const { username } = route.params;
@@ -28,7 +29,7 @@ const ProfileScreen = ({ route }) => {
   }, []);
 
   const handleStartGame = () => {
-    navigation.navigate('Game'); // Navigate to GameScreen
+    navigation.navigate('Game',{ username }); // Navigate to GameScreen
   };
 
   return (
@@ -53,6 +54,7 @@ const styles = StyleSheet.create({
       fontSize: 24,
       fontWeight: 'bold',
       marginBottom: 20,
+      fontFamily : 'atmaMedium'
     },
     button: {
       backgroundColor: '#E493B3',

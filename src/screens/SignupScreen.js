@@ -38,12 +38,6 @@ const SignupScreen = ({ navigation }) => {
               setMessage('Password minimal harus 6 karakter');
               return;
           } 
-        //   else {
-        //       // Reset error popup if the password meets the requirement
-        //       setErrorModalVisible(false);
-        //       setMessage('');
-        //       return;
-        //   }
   
           // Check if password and retype password match
           if (password !== retypePassword) {
@@ -59,12 +53,6 @@ const SignupScreen = ({ navigation }) => {
           const response = await axios.post('http://localhost:5000/api/signup', { username, password, name, retypePassword });
           console.log('response', response);
   
-        //   if (response.data && response.data.error === 'Username already exists') {
-        //       // Show error popup if the username already exists
-        //       setErrorModalVisible(true);
-        //       setMessage('Username sudah pernah dibuat');
-        //       return;
-        //   }
   
           // If everything is successful, show the success modal and navigate to login screen
           setSuccessModalVisible(true); // Set success modal visible

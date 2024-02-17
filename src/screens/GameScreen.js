@@ -14,6 +14,7 @@ import restartImage from '../assets/restart.png';
 import PopUpModal from '../components/PopUpModal';
 import PopUpLogout from '../components/PopUpLogout';
 import leaderboardImage from '../assets/leaderboard.png';
+import atmaMedium from '../assets/Atma-Medium.ttf';
 
 
 const getImageForMove = (move) => {

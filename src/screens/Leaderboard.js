@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, View, Text, FlatList, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, FlatList, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
 import goldmedal from '../assets/goldmedal.png'
 import silvermedal from '../assets/silvermedal.png'
 import bronzemedal from '../assets/bronzemedal.png'
@@ -7,43 +7,77 @@ import gb1 from '../assets/gb1.png'
 import champion from '../assets/champion1.png'
 import Brodille from '../assets/Brodille-Regular.ttf'
 
-const Leaderboard = () => {
-  // Dummy leaderboard data
-  const leaderboardData = [
-    { username: 'Player1', score: 100 },
-    { username: 'Player2', score: 90 },
-    { username: 'Player3', score: 80 },
-    { username: 'Player4', score: 70 },
-    { username: 'Player5', score: 60 },
-    { username: 'Player6', score: 50 },
-    { username: 'Player7', score: 40 },
-    { username: 'Player8', score: 30 },
-    { username: 'Player9', score: 20 },
-    { username: 'Player10', score: 10 },
-  ];
+const Leaderboard = ({ route }) => {
+  const { token, username } = route.params;
+  const [leaderboardData, setLeaderboardData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Images for ranks 1, 2, and 3
-  const rankImages = [goldmedal,silvermedal,bronzemedal];
+  useEffect(() => {
+    fetchLeaderboardData();
+  }, []);
+
+  const fetchLeaderboardData = async () => {
+    try {
+      const response = await fetch(`https://joey-pet-minnow.ngrok-free.app/api/game/leaderboard/${username}`, {
+        method: 'POST',
+        headers: {
+          'X-API-TOKEN': token,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch leaderboard data');
+      }
+      const data = await response.json();
+      setLeaderboardData(data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching leaderboard data:', error);
+      setError(error.message);
+      setLoading(false);
+    }
+  };
+
+  const rankImages = [goldmedal, silvermedal, bronzemedal];
   const rankColors = ['#FFD700', '#C0C0C0', '#CD7F32'];
 
-  // Render item for leaderboard list
   const renderLeaderboardItem = ({ item, index }) => (
     <View style={styles.itemContainer}>
-      <View style={[styles.rankContainer,{ backgroundColor: index < 3 ? rankColors[index] : '#AC87C5' }]}>
-      {index < 3 ? (
-        <Image source={rankImages[index]} style={styles.rankImage} />
-      ) : (
-        <Text style={styles.rank}>{index + 1}</Text>
-      )}
+      <View style={[styles.rankContainer, { backgroundColor: index < 3 ? rankColors[index] : '#AC87C5' }]}>
+        {index < 3 ? (
+          <Image source={rankImages[index]} style={styles.rankImage} />
+        ) : (
+          <Text style={styles.rank}>{index + 1}</Text>
+        )}
       </View>
       <View style={styles.usernameContainer}>
-        <Text style={styles.username}>{item.username}</Text>
+        <Text style={styles.username}>{item.name}</Text>
       </View>
       <View style={styles.scoreContainer}>
-        <Text style={styles.score}>{item.score}</Text>
+        <Text style={styles.score}>{item.userWins}</Text>
       </View>
     </View>
   );
+
+  if (loading) {
+    return (
+      <View style={[styles.container, styles.loadingContainer]}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={[styles.container, styles.errorContainer]}>
+        <Text style={styles.errorText}>Failed to load leaderboard data. Please try again later.</Text>
+        <TouchableOpacity onPress={fetchLeaderboardData} style={styles.retryButton}>
+          <Text style={styles.retryButtonText}>Retry</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -53,10 +87,11 @@ const Leaderboard = () => {
         renderItem={renderLeaderboardItem}
         keyExtractor={(item, index) => index.toString()}
       />
-       <Image source={gb1} style={styles.Image} />
+      <Image source={gb1} style={styles.Image} />
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -65,6 +100,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 20,
+  },
+  loadingContainer: {
+    justifyContent: 'center',
+  },
+  errorContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  errorText: {
+    fontSize: 18,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  retryButton: {
+    backgroundColor: '#4CAF50',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  retryButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   title: {
     fontSize: 24,
@@ -148,6 +206,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 10, // Android only
   },
+  // rest of your styles remain the same
 });
 
 export default Leaderboard;

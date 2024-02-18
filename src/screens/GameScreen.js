@@ -213,7 +213,7 @@ const GameScreen = ({ navigation, route }) => {
                                             <Text>   </Text>
                                             <Text>   </Text>
                                             <Text>   </Text> */}
-                        <View style={styles.resultContainer}>
+                        {/* <View style={styles.resultContainer}>
                             <View style={styles.moveContainer}>
                                 <Text>You</Text>
                                 <Image source={getImageForMove(userMove)} style={styles.image} />
@@ -223,7 +223,7 @@ const GameScreen = ({ navigation, route }) => {
                                 <Text>Computer</Text>
                                 <Image source={computerMoves[computerMoveIndex]} style={styles.image} />
                             </View>
-                        </View>
+                        </View> */}
                         {/* <Text style={[styles.resultText, styles.resultOutcomeText]}>{result}</Text> */}
                     </View>
                 )}

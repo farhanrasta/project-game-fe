@@ -9,6 +9,7 @@ const ProfileScreen = ({ route }) => {
   const [greeting, setGreeting] = useState('');
   const navigation = useNavigation(); // Get navigation object
   const [name, setName] = useState('');
+  const [logoutModalVisible, setLogoutModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchGreeting = async () => {
@@ -33,6 +34,33 @@ const ProfileScreen = ({ route }) => {
     navigation.navigate('Game',{ username, token }); // Navigate to GameScreen
   
   };
+
+  const handleLogout = async () => {
+    // Perform logout operation here
+    // For example: navigation.navigate('Login');
+    try {
+        const response = await axios.delete(
+            `https://joey-pet-minnow.ngrok-free.app/api/logout/${username}`, // Sesuaikan dengan URL endpoint logout di backend Anda
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+        // Clear local storage, reset states, navigate to login, etc.
+        if (response.status === 200) {
+            navigation.navigate('Login');
+            console.log('Logout Success');
+        } else {
+            console.log('Logout Failed');
+        }
+    } catch (error) {
+        console.error('Logout failed:', error);
+        // Handle logout failure, display error message, etc.
+    }
+    setLogoutModalVisible(false); // Close the logout modal
+};
 
   return (
     <View style={styles.container}>

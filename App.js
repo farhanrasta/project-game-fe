@@ -20,10 +20,10 @@ const App = () => {
       <Stack.Navigator initialRouteName='Home'>
         <Stack.Screen name="Home" component={HomeScreen}/>
         <Stack.Screen name="Login" component={LoginScreen}/>
-        <Stack.Screen name="Welcome" component={Welcome}/>
+        <Stack.Screen name="Welcome" component={Welcome} options={{ headerLeft: null }}/>
         <Stack.Screen name="Signup" component={SignupScreen}/>
         <Stack.Screen name="Leaderboard" component={Leaderboard} />
-        <Stack.Screen name="Game" component={GameScreen} options={{ headerLeft: null }}/>
+        <Stack.Screen name="Game" component={GameScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   )

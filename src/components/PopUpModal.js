@@ -31,12 +31,12 @@ const PopUpModal = ({ visible, onClose, userMove, computerMove, result }) => {
                     <View style={styles.resultContainer}>
                         <View style={styles.moveContainer}>
                             <Text style={styles.text1}>You</Text>
-                            {/* <Image source={getImageForMove(userMove)} style={styles.image} />*/}
+                            <Image source={getImageForMove(userMove)} style={styles.image} />
                         </View>
                         <Image source={vS} style={styles.image} />
                         <View style={styles.moveContainer}>
                             <Text style={styles.text2}>Computer</Text>
-                            {/* <Image source={getImageForMove(computerMove)} style={styles.image} />*/}
+                            <Image source={getImageForMove(computerMove)} style={styles.image} />
                         </View>
                     </View>
                     <Text>{result}</Text>

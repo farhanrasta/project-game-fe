@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet,Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import gb2 from '../assets/gb2.png'
+import PopUpLogout from '../components/PopUpLogout';
+import settingImage from '../assets/logout.png';
+
+
 
 const ProfileScreen = ({ route }) => {
   const { username, token } = route.params;
@@ -10,6 +14,11 @@ const ProfileScreen = ({ route }) => {
   const navigation = useNavigation(); // Get navigation object
   const [name, setName] = useState('');
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
+
+  useEffect(() => {
+    navigation.setParams({ toggleModal: () => setLogoutModalVisible(true) });
+}, false);
+
 
   useEffect(() => {
     const fetchGreeting = async () => {
@@ -28,7 +37,7 @@ const ProfileScreen = ({ route }) => {
     };
 
     fetchGreeting();
-  }, []);
+  }, [token]); // Add token to dependency array
 
   const handleStartGame = () => {
     navigation.navigate('Game',{ username, token }); // Navigate to GameScreen
@@ -65,12 +74,25 @@ const ProfileScreen = ({ route }) => {
   return (
     <View style={styles.container}>
         <Image source={gb2} style={styles.image} />
-      <Text style={styles.text}>Hi, {name}</Text>
+      <Text style={styles.text}>Hi, {username}</Text>
       <Text style={styles.text}>Are you ready? </Text>
       <TouchableOpacity style={styles.button} onPress={handleStartGame}>
         <Text style={styles.buttonText}>Let's Start</Text>
       </TouchableOpacity>
-    </View>
+               <View style={styles.settingContainer}>
+                   <TouchableOpacity
+                       style={styles.settingButton}
+                       onPress={() => setLogoutModalVisible(true)}
+                   >
+                       <Image source={settingImage} style={styles.logo} />
+                   </TouchableOpacity>
+                   </View>
+                   <PopUpLogout 
+                    visible={logoutModalVisible}
+                    onClose={() => setLogoutModalVisible(false)}
+                    handleLogout={handleLogout}
+                    />
+                   </View>
   );
 };
 
@@ -95,6 +117,19 @@ const styles = StyleSheet.create({
       fontSize: 16,
       fontWeight: 'bold',
     },
+    settingContainer: {
+      position: 'absolute',
+      flexDirection: 'row',
+      top: 20,
+      right: 20,
+  }, 
+  logo: {
+    width: 30,
+    height: 30,
+    resizeMode: 'contain',
+    justifyContent: 'flex-end' ,
+    marginLeft: 5,
+},
   });
   
   export default ProfileScreen;

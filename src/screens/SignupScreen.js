@@ -57,14 +57,13 @@ const SignupScreen = ({ navigation }) => {
           // If everything is successful, show the success modal and navigate to login screen
           setSuccessModalVisible(true); // Set success modal visible
           setErrorModalVisible(false); // Hide error popup if sign up is successful
-          navigation.navigate('LoginScreen'); // Moved this line to after setting success modal visible
+        //   navigation.navigate('Login'); // Moved this line to after setting success modal visible
       } catch (error) {
           console.log(error.code);
-          if (error.code==='ERR_NETWORK') {
+          if (error.code === 'ERR_NETWORK' || error.code === "ERR_BAD_REQUEST") {
             // Show error popup if the username already exists
             setErrorModalVisible(true);
             setMessage('Username sudah pernah dibuat');
-            return;
         }
           //setErrorModalVisible(true);
           console.error('Signup Failed', error);
@@ -79,6 +78,11 @@ const SignupScreen = ({ navigation }) => {
     const toggleShowRetypePassword = () => {
         setShowRetypePassword(!showRetypePassword);
     };
+
+    const onSuccessClose = () => {
+        setSuccessModalVisible(false);
+        navigation.navigate('Login');
+    }; 
 
     return (
         <View style={styles.container}>
@@ -150,10 +154,10 @@ const SignupScreen = ({ navigation }) => {
                 <PopUpSignup
                     errorVisible={errorModalVisible} // Add a new prop for error popup visibility
                     successVisible={successModalVisible} // Add a new prop for success popup visibility
-                    onClose={() => {
+                    onCloseError={() => {
                         setErrorModalVisible(false);
-                        setSuccessModalVisible(false);
                     }}
+                    onCloseSuccess={onSuccessClose}
                     status={status}
                     message={message}
                 />      

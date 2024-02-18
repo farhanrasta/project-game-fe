@@ -96,14 +96,12 @@ const GameScreen = ({ navigation, route }) => {
     };
 
 
-    const handleGame = (userChoice) => {
+    const handleGame = async (userChoice) => {
         console.log('userChoice', userChoice);
-
-        console.log('computerIndex', computerMoveIndex);
-        const computerChoice = choices[computerMoveIndex];
-
+        const computerIndex = Math.floor(Math.random() * choices.length); // Randomize computer move index
+        const computerChoice = choices[computerIndex]; // Get computer choice based on random index
+    
         setUserMove(userChoice);
-        // console.log(userMove);
         setComputerMove('running'); // Set computer move to a running state initially
         setAnimationRunning(true); // Start animation
 
@@ -134,7 +132,8 @@ const GameScreen = ({ navigation, route }) => {
             }
         }, 1000);
     };
-
+    
+    
     const handleModalClose = () => {
         setIsModalVisible(false);
         setUserMove('');

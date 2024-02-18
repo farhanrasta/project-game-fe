@@ -227,13 +227,13 @@ const GameScreen = ({ navigation, route }) => {
                 )}
                     
 
-                    {/* <PopUpModal
+                    <PopUpModal
                         visible={isModalVisible}
                         onClose={handleModalClose}
                         userMove={userMove}
                         computerMove={computerMove}
                         result={result}
-                    /> */}
+                    /> 
                     {/* Logout Modal */}
                     <PopUpLogout 
                     visible={logoutModalVisible}

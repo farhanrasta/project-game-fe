@@ -30,13 +30,13 @@ const PopUpModal = ({ visible, onClose, userMove, computerMove, result }) => {
                 <View style={styles.modalView}>
                     <View style={styles.resultContainer}>
                         <View style={styles.moveContainer}>
-                            <Text>You</Text>
-                            <Image source={getImageForMove(userMove)} style={styles.image} />
+                            <Text style={styles.text1}>You</Text>
+                            {/* <Image source={getImageForMove(userMove)} style={styles.image} />*/}
                         </View>
                         <Image source={vS} style={styles.image} />
                         <View style={styles.moveContainer}>
-                            <Text>Computer</Text>
-                            <Image source={getImageForMove(computerMove)} style={styles.image} />
+                            <Text style={styles.text2}>Computer</Text>
+                            {/* <Image source={getImageForMove(computerMove)} style={styles.image} />*/}
                         </View>
                     </View>
                     <Text>{result}</Text>
@@ -88,6 +88,16 @@ const styles = StyleSheet.create({
     button: {
         padding: 10,
         paddingTop: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    text1: {
+        fontSize: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    text2: {
+        fontSize: 20,
         alignItems: 'center',
         justifyContent: 'center',
     },

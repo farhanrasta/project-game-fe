@@ -3,7 +3,7 @@ import React from 'react';
 //import { useFonts, Atma } from '../assets/Atma';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import PopUpError from '../components/PopUpError';
+import PopUpError from '../components/PopUpLogin';
 //import PopUpSignup from '../components/PopUpSignup';
 const HomeScreen = ({navigation}) => {
   return (

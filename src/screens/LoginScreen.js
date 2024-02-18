@@ -2,8 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View, Image, Button, TextInput } fr
 import React, { useState } from 'react';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import PopUpError from '../components/PopUpError';
-//import PopUpSignup from '../components/PopUpSignup';
+import PopUpLogin from '../components/PopUpLogin';
 
 const LoginScreen = ({ navigation }) => {
   const [username, setUserName] = useState('');
@@ -28,7 +27,7 @@ const LoginScreen = ({ navigation }) => {
       setPassword('');
 
       //navigation.navigate('Splash');
-      navigation.navigate('Game', { token, username });
+      navigation.navigate('Welcome', { token, username });
     } catch (error) {
 
       if (error.code === "ERR_BAD_REQUEST") {
@@ -83,7 +82,7 @@ const LoginScreen = ({ navigation }) => {
         <Text style={styles.buttonText}>{'\n'}Belum memiliki akun?</Text>
       </TouchableOpacity>
 
-      <PopUpError
+      <PopUpLogin
         visible={modalVisible}
         onClose={handleCloseModal}
         message={message}

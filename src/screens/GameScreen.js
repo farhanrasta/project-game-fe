@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, Modal,Pressable } from 'react-native';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
+
 
 import guntingImage from '../assets/scissors.png';
 import batuImage from '../assets/rock.png';
@@ -10,6 +12,10 @@ import homepageImage from '../assets/gb2.png';
 import settingImage from '../assets/logout.png';
 import restartImage from '../assets/restart.png';
 import PopUpModal from '../components/PopUpModal';
+import PopUpLogout from '../components/PopUpLogout';
+import leaderboardImage from '../assets/leaderboard.png';
+import atmaMedium from '../assets/Atma-Medium.ttf';
+
 
 const getImageForMove = (move) => {
     switch (move) {
@@ -24,7 +30,7 @@ const getImageForMove = (move) => {
     }
 };
 
-const HomeScreen = ({ navigation, route }) => {
+const GameScreen = ({ navigation, route }) => {
     const [userMove, setUserMove] = useState('');
     const [computerMove, setComputerMove] = useState('');
     const [result, setResult] = useState('');
@@ -38,6 +44,10 @@ const HomeScreen = ({ navigation, route }) => {
     const [logoutModalVisible, setLogoutModalVisible] = useState(false);
 
     const { username, token } = route.params;
+
+    useEffect(() => {
+        navigation.setParams({ toggleModal: () => setLogoutModalVisible(true) });
+    }, false);
 
     useEffect(() => {
         if (animationRunning) {
@@ -70,7 +80,7 @@ const HomeScreen = ({ navigation, route }) => {
         setUserWins(0);
         setComputerWins(0)
         try{
-            const respons = await axios.post(
+            const response = await axios.post(
                 `https://joey-pet-minnow.ngrok-free.app/api/game/reset/${username}`, {}, 
                 {
                     headers: {
@@ -78,7 +88,7 @@ const HomeScreen = ({ navigation, route }) => {
                         'Content-Type' : 'application/json'
                     }
                 });
-                console.log('Reset response:', respons.data);
+                console.log('Reset ee:', response.data);
         } catch (error) {
             console.error('Game Error', error);
         }
@@ -86,14 +96,12 @@ const HomeScreen = ({ navigation, route }) => {
     };
 
 
-    const handleGame = (userChoice) => {
+    const handleGame = async (userChoice) => {
         console.log('userChoice', userChoice);
-
-        console.log('computerIndex', computerMoveIndex);
-        const computerChoice = choices[computerMoveIndex];
-
+        const computerIndex = Math.floor(Math.random() * choices.length); // Randomize computer move index
+        const computerChoice = choices[computerIndex]; // Get computer choice based on random index
+    
         setUserMove(userChoice);
-        // console.log(userMove);
         setComputerMove('running'); // Set computer move to a running state initially
         setAnimationRunning(true); // Start animation
 
@@ -101,22 +109,22 @@ const HomeScreen = ({ navigation, route }) => {
         setTimeout( async () => {
             // setComputerMove(computerMoveIndex); // Set final computer move
             try{
-                const respons = await axios.post(`https://joey-pet-minnow.ngrok-free.app/api/game/${username}`, {userMove : userChoice, computerMove: computerChoice},{
+                const response = await axios.post(`https://joey-pet-minnow.ngrok-free.app/api/game/${username}`, {userMove : userChoice, computerMove: computerChoice},{
                     headers: {
                         Authorization : `Bearer ${token}`,
                         'Content-type' : 'application/json'
                     }
                 });
 
-                setUserMove(respons.data.userMove);
-                console.log("userMOOOOOVE:" ,respons.data)
-                setComputerMove(respons.data.computerMove);
-                setResult(respons.data.result);
-                setUserWins(respons.data.userWins);
-                setComputerWins(respons.data.computerWins);
+                setUserMove(response.data.userMove);
+                console.log("userMOOOOOVE:" ,response.data)
+                setComputerMove(response.data.computerMove);
+                setResult(response.data.result);
+                setUserWins(response.data.userWins);
+                setComputerWins(response.data.computerWins);
     
-                console.log("Game Result Alert:", `User Move: ${respons.data.userMove}\nComputer Move: ${respons.data.computerMove}\nResult: ${respons.data.result}`);
-                console.log("Game Result Alert:", `User Wins: ${respons.data.userWins}\nComputer Wins: ${respons.data.computerWins}`);
+                console.log("Game Result Alert:", `User Move: ${response.data.userMove}\nComputer Move: ${response.data.computerMove}\nResult: ${response.data.result}`);
+                console.log("Game Result Alert:", `User Wins: ${response.data.userWins}\nComputer Wins: ${response.data.computerWins}`);
                 setIsModalVisible(true);
             
             } catch (error) {
@@ -124,7 +132,8 @@ const HomeScreen = ({ navigation, route }) => {
             }
         }, 1000);
     };
-
+    
+    
     const handleModalClose = () => {
         setIsModalVisible(false);
         setUserMove('');
@@ -136,7 +145,7 @@ const HomeScreen = ({ navigation, route }) => {
         // Perform logout operation here
         // For example: navigation.navigate('Login');
         try {
-            const respons = await axios.delete(
+            const response = await axios.delete(
                 `https://joey-pet-minnow.ngrok-free.app/api/logout/${username}`, // Sesuaikan dengan URL endpoint logout di backend Anda
                 {
                     headers: {
@@ -146,7 +155,7 @@ const HomeScreen = ({ navigation, route }) => {
                 }
             );
             // Clear local storage, reset states, navigate to login, etc.
-            if (respons.status === 200) {
+            if (response.status === 200) {
                 navigation.navigate('Login');
                 console.log('Logout Success');
             } else {
@@ -159,12 +168,19 @@ const HomeScreen = ({ navigation, route }) => {
         setLogoutModalVisible(false); // Close the logout modal
     };
 
+    const handleLeaderboardNavigation = () => {
+        navigation.navigate('Leaderboard',{username, token}); // Navigate to the leaderboard page
+    };
+
     
     return (
         <View style={styles.container}>
             <View style={styles.settingContainer}>
+                <TouchableOpacity style={styles.leaderboardButton} onPress={handleLeaderboardNavigation}>
+                    <Image source={leaderboardImage} style={styles.logo2} />
+                </TouchableOpacity> 
                 <TouchableOpacity style={styles.settingButton} onPress={handleRestart}>
-                <Image source={restartImage} style={styles.logo} />
+                    <Image source={restartImage} style={styles.logo} />
                 </TouchableOpacity>  
                 <TouchableOpacity
                     style={styles.settingButton}
@@ -219,33 +235,13 @@ const HomeScreen = ({ navigation, route }) => {
                         result={result}
                     /> */}
                     {/* Logout Modal */}
-
-                    <Modal
-                    animationType="slide"
-                    transparent={true}
+                    <PopUpLogout 
                     visible={logoutModalVisible}
-                    onRequestClose={() => setLogoutModalVisible(false)}
-                >
-                    <View style={styles.modalContainer}>
-                        <View style={styles.modalContent}>
-                            <Text style={styles.modalText}>Are you sure you want to logout?</Text>
-                            <View style={styles.modalButtonContainer}>
-                                <Pressable
-                                    style={[styles.modalButton, { backgroundColor: '#AC87C5' }]}
-                                    onPress={handleLogout}
-                                >
-                                    <Text style={styles.modalButtonText}>Logout</Text>
-                                </Pressable>
-                                <Pressable
-                                    style={[styles.modalButton, { backgroundColor: '#E0AED0' }]}
-                                    onPress={() => setLogoutModalVisible(false)}
-                                >
-                                    <Text style={styles.modalButtonText}>Cancel</Text>
-                                </Pressable>
-                            </View>
-                        </View>
-                    </View>
-                </Modal>
+                    onClose={() => setLogoutModalVisible(false)}
+                    handleLogout={handleLogout}
+                    />
+
+                    
                 {/* Setting Button */}
                 {/* <TouchableOpacity style={styles.leaderboardButton} onPress={handleRestart}>
                     <Text style={styles.logoutButtonText}>Leaderboard</Text>
@@ -254,6 +250,10 @@ const HomeScreen = ({ navigation, route }) => {
         </View>
     );
 };
+
+GameScreen.navigationOptions =  {
+    headerLeft: () => null
+  };
 
 const styles = StyleSheet.create({
     container: {
@@ -275,6 +275,15 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.5,
         shadowRadius: 3.84,
         elevation: 10, // Android only
+    },
+    logo2: {
+        width: 40,
+        height: 40,
+        resizeMode: 'contain',
+        justifyContent: 'flex-end' ,
+        marginLeft: 15,
+        padding: 20,
+        borderRadius: 15,
     },
     scoreText: {
         fontSize: 18,
@@ -335,10 +344,10 @@ const styles = StyleSheet.create({
         marginLeft: 5,
     },
     leaderboardButton: {
-        backgroundColor: '#E493B3',
         padding: 10,
         borderRadius: 5,
-        marginTop : 40,
+        marginTop : -20,
+        marginRight : 275,
     },
     restartButton: {
         backgroundColor: '#E0AED0',
@@ -367,6 +376,11 @@ const styles = StyleSheet.create({
     subtitle: {
         fontSize: 18,
         marginBottom: 20,
+    },
+    settingsButton: {
+        marginRight: 10,
+        color: 'blue',
+        fontSize: 16,
     },
         // Modal styles
         modalContainer: {
@@ -398,4 +412,4 @@ const styles = StyleSheet.create({
         },
 });
 
-export default HomeScreen;
+export default GameScreen;

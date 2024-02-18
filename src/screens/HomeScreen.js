@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image, Button, TextInput } from 'react-native';
 import React from 'react';
-//import AtmaBold from '../assets/Atma-Bold.ttf'
-//import AtmaMedium from '../assets/Atma-Medium.ttf'
+import AtmaBold from '../assets/Atma-Bold.ttf'
+import AtmaMedium from '../assets/Atma-Medium.ttf'
 import {useFonts} from 'expo-font';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     fontSize: 36,
     fontWeight: 'bold',
     alignItems: 'center',
-    fontFamily: 'Atma-Bold'
+    fontFamily: 'AtmaBold'
   },
   logButton: {
     backgroundColor: '#E0AED0',
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontWeight: 'bold',
     position: 'relative',
-    fontFamily: 'Atma-Medium'
+    fontFamily: 'AtmaMedium'
   },
   signButton: {
     backgroundColor: '#E0AED0',
@@ -84,6 +84,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontWeight: 'bold',
     position: 'relative',
-    fontFamily: 'Atma-Medium'
+    fontFamily: 'AtmaMedium'
   },  
 });

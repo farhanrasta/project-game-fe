@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { TextInput,View, Modal, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 
-const PopUpError = ({ visible, onClose, message }) => {
+const PopUpLogin = ({ visible, onClose, message }) => {
   
     return (
     <Modal
@@ -68,4 +68,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PopUpError;
+export default PopUpLogin;

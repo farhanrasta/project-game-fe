@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Modal, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-const PopUpSignup = ({ errorVisible, successVisible, onClose, message }) => {
+const PopUpSignup = ({ errorVisible, successVisible, onCloseError, message, onCloseSuccess }) => {
     // Determine which modal to show based on props
     const visible = errorVisible || successVisible;
 
@@ -10,12 +10,13 @@ const PopUpSignup = ({ errorVisible, successVisible, onClose, message }) => {
             animationType="fade"
             transparent={true}
             visible={visible}
-            onRequestClose={onClose}
+            onCloseError={onCloseError}
+            onCloseSuccess={onCloseSuccess}
         >
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
                     <Text>{errorVisible ? message : 'Akun berhasil dibuat!'}</Text>
-                    <TouchableOpacity onPress={onClose} style={styles.button}>
+                    <TouchableOpacity onPress={errorVisible ? onCloseError : onCloseSuccess} style={styles.button}>
                         <Text style={styles.okText}>OK</Text>
                     </TouchableOpacity>
                 </View>

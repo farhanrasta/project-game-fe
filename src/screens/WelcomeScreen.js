@@ -8,9 +8,8 @@ import settingImage from '../assets/logout.png';
 
 
 
-const ProfileScreen = ({ route }) => {
+const WelcomeScreen = ({ route }) => {
   const { username, token } = route.params;
-  const [greeting, setGreeting] = useState('');
   const navigation = useNavigation(); // Get navigation object
   const [name, setName] = useState('');
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
@@ -23,16 +22,21 @@ const ProfileScreen = ({ route }) => {
   useEffect(() => {
     const fetchGreeting = async () => {
       try {
-        const response = await axios.get(`https://joey-pet-minnow.ngrok-free.app/api/login/${username}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setGreeting(response.data.greeting);
-        setName(response.data.name);
+        const response = await axios.get(`http://localhost:5000/api/login/${username}`,
+          {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+          }
+        );
+        console.log("name", response);
+        const name = response.data.name;
+        console.log("name", response.data);
+        setName(name);
+        console.log("name", response.data.name);
       } catch (error) {
         console.error('Error fetching greeting:', error);
-        Alert.alert('Error', 'Failed to fetch greeting');
       }
     };
 
@@ -132,4 +136,4 @@ const styles = StyleSheet.create({
 },
   });
   
-  export default ProfileScreen;
+  export default WelcomeScreen;

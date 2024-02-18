@@ -20,7 +20,7 @@ const Leaderboard = ({ route }) => {
 
   const fetchLeaderboardData = async () => {
     try {
-      const response = await axios.get(`https://joey-pet-minnow.ngrok-free.app/api/game/leaderboard/${username}`, {
+      const response = await axios.get(`http://localhost:5000/api/game/leaderboard/${username}`, {
         headers: {
           Authorization : `Bearer ${token}`,
           'Content-type' : 'application/json'

@@ -146,7 +146,7 @@ const GameScreen = ({ navigation, route }) => {
         // For example: navigation.navigate('Login');
         try {
             const response = await axios.delete(
-                `https://joey-pet-minnow.ngrok-free.app/api/logout/${username}`, // Sesuaikan dengan URL endpoint logout di backend Anda
+                `https://joey-pet-minnow.ngrok-free.app/api/logout/${username}`, 
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,

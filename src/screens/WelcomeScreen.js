@@ -16,7 +16,7 @@ const WelcomeScreen = ({ route }) => {
 
   useEffect(() => {
     navigation.setParams({ toggleModal: () => setLogoutModalVisible(true) });
-}, false);
+}, []);
 
 
   useEffect(() => {
@@ -77,26 +77,26 @@ const WelcomeScreen = ({ route }) => {
 
   return (
     <View style={styles.container}>
-        <Image source={gb2} style={styles.image} />
-      <Text style={styles.text}>Hi {name}</Text>
-      <Text style={styles.text}>Are You Ready? </Text>
-      <TouchableOpacity style={styles.button} onPress={handleStartGame}>
+    <Image source={gb2} style={styles.image} />
+    <Text style={styles.text}>Hi {name}</Text>
+    <Text style={styles.text}>Are You Ready? </Text>
+    <TouchableOpacity style={styles.button} onPress={handleStartGame}>
         <Text style={styles.buttonText}>Let's Start</Text>
-      </TouchableOpacity>
-               <View style={styles.settingContainer}>
-                   <TouchableOpacity
-                       style={styles.settingButton}
-                       onPress={() => setLogoutModalVisible(true)}
-                   >
-                       <Image source={settingImage} style={styles.logo} />
-                   </TouchableOpacity>
-                   </View>
-                   <PopUpLogout 
-                    visible={logoutModalVisible}
-                    onClose={() => setLogoutModalVisible(false)}
-                    handleLogout={handleLogout}
-                    />
-                   </View>
+    </TouchableOpacity>
+    <View style={styles.settingContainer}>
+        <TouchableOpacity
+            style={styles.settingButton}
+            onPress={() => setLogoutModalVisible(true)}
+        >
+            <Image source={settingImage} style={styles.logo} />
+        </TouchableOpacity>
+    </View>
+    <PopUpLogout 
+        visible={logoutModalVisible}
+        onClose={() => setLogoutModalVisible(false)}
+        handleLogout={handleLogout}
+    />
+</View>
   );
 };
 

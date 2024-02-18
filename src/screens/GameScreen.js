@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Modal,Pressable } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import axios from 'axios';
-import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
-
+import { useNavigation } from '@react-navigation/native';
 
 import guntingImage from '../assets/scissors.png';
 import batuImage from '../assets/rock.png';
@@ -14,21 +13,6 @@ import restartImage from '../assets/restart.png';
 import PopUpModal from '../components/PopUpModal';
 import PopUpLogout from '../components/PopUpLogout';
 import leaderboardImage from '../assets/leaderboard.png';
-import atmaMedium from '../assets/Atma-Medium.ttf';
-
-
-const getImageForMove = (move) => {
-    switch (move) {
-        case 'gunting':
-            return guntingImage;
-        case 'batu':
-            return batuImage;
-        case 'kertas':
-            return kertasImage;
-        default:
-            return null;
-    }
-};
 
 const GameScreen = ({ navigation, route }) => {
     const [userMove, setUserMove] = useState('');
@@ -45,7 +29,6 @@ const GameScreen = ({ navigation, route }) => {
 
     const { username, token } = route.params;
 
-
     useEffect(() => {
         console.log('Current computerMoveIndex:', computerMoveIndex);
     }, [computerMoveIndex]);
@@ -55,33 +38,29 @@ const GameScreen = ({ navigation, route }) => {
     }, [computerMoves, computerMoveIndex]);
 
     const handleRestart = async () => {
-        console.log("handleRestart");
         setUserWins(0);
-        setComputerWins(0)
-        try{
+        setComputerWins(0);
+        try {
             const response = await axios.post(
                 `https://kind-fez-ox.cyclic.app/api/game/reset/${username}`, {}, 
                 {
                     headers: {
-                        Authorization : `Bearer ${token}`,
-                        'Content-Type' : 'application/json'
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json'
                     }
-                });
-                console.log('Reset ee:', response.data);
+                }
+            );
+            console.log('Reset response:', response.data);
         } catch (error) {
             console.error('Game Error', error);
         }
-
     };
 
     useEffect(() => {
         if (animationRunning) {
             const interval = setInterval(() => {
                 const index = (prevIndex) => (prevIndex + 1) % 3;
-                // const index = Math.floor(Math.random() * computerMoves.length);
                 setComputerMoveIndex(index);
-                console.log('computerMoveIndex', computerMoveIndex);
-                console.log('computerMoves', computerMoves);
             }, 100); // Change image every 0.1 second
 
             // Stop animation after 3 seconds
@@ -93,7 +72,6 @@ const GameScreen = ({ navigation, route }) => {
     }, [animationRunning, computerMoves.length]);
 
     const handleGame = async (userChoice) => {
-        console.log('userChoice', userChoice);
         const computerIndex = Math.floor(Math.random() * choices.length); // Randomize computer move index
         const computerChoice = choices[computerIndex]; // Get computer choice based on random index
     
@@ -102,33 +80,27 @@ const GameScreen = ({ navigation, route }) => {
         setAnimationRunning(true); // Start animation
 
         // Determine game result after 3 seconds
-        setTimeout( async () => {
-            // setComputerMove(computerMoveIndex); // Set final computer move
-            try{
-                const response = await axios.post(`https://kind-fez-ox.cyclic.app/api/game/${username}`, {userMove : userChoice, computerMove: computerChoice},{
+        setTimeout(async () => {
+            try {
+                const response = await axios.post(`https://kind-fez-ox.cyclic.app/api/game/${username}`, {userMove: userChoice, computerMove: computerChoice}, {
                     headers: {
-                        Authorization : `Bearer ${token}`,
-                        'Content-type' : 'application/json'
+                        Authorization: `Bearer ${token}`,
+                        'Content-type': 'application/json'
                     }
                 });
 
                 setUserMove(response.data.userMove);
-                console.log("userMOOOOOVE:" ,response.data)
                 setComputerMove(response.data.computerMove);
                 setResult(response.data.result);
                 setUserWins(response.data.userWins);
                 setComputerWins(response.data.computerWins);
     
-                console.log("Game Result Alert:", `User Move: ${response.data.userMove}\nComputer Move: ${response.data.computerMove}\nResult: ${response.data.result}`);
-                console.log("Game Result Alert:", `User Wins: ${response.data.userWins}\nComputer Wins: ${response.data.computerWins}`);
                 setIsModalVisible(true);
-            
             } catch (error) {
                 console.error('Game Error', error);
             }
         }, 1000);
     };
-    
     
     const handleModalClose = () => {
         setIsModalVisible(false);
@@ -157,16 +129,14 @@ const GameScreen = ({ navigation, route }) => {
             }
         } catch (error) {
             console.error('Logout failed:', error);
-            
         }
         setLogoutModalVisible(false);  
     };
 
     const handleLeaderboardNavigation = () => {
-        navigation.navigate('Leaderboard',{username, token}); // Navigate to the leaderboard page
+        navigation.navigate('Leaderboard', { username, token });
     };
 
-    
     return (
         <View style={styles.container}>
             <View style={styles.settingContainer}>
@@ -176,86 +146,47 @@ const GameScreen = ({ navigation, route }) => {
                 <TouchableOpacity style={styles.settingButton} onPress={handleRestart}>
                     <Image source={restartImage} style={styles.logo} />
                 </TouchableOpacity>  
-                <TouchableOpacity
-                    style={styles.settingButton}
-                    onPress={() => setLogoutModalVisible(true)}
-                >
+                <TouchableOpacity style={styles.settingButton} onPress={() => setLogoutModalVisible(true)}>
                     <Image source={settingImage} style={styles.logo} />
                 </TouchableOpacity>
-                </View>
+            </View>
             <Image source={homepageImage} style={styles.image2} />
             <View style={styles.scoreContainer}>
-                <Text style={styles.scoreText}>  {userWins}</Text>
-                <Text style={styles.scoreText}>:  {computerWins}</Text>
+                <Text style={styles.scoreText}>{userWins}</Text>
+                <Text style={styles.scoreText}>:{computerWins}</Text>
             </View>
             <View style={styles.gameContainer}>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity style={styles.buttonWrapper} onPress={() => handleGame('gunting')}>
                         <Image source={guntingImage} style={styles.image} />
                     </TouchableOpacity>
-                    <Text>   </Text>
                     <TouchableOpacity style={styles.buttonWrapper} onPress={() => handleGame('batu')}>
                         <Image source={batuImage} style={styles.image} />
                     </TouchableOpacity>
-                    <Text>   </Text>
                     <TouchableOpacity style={styles.buttonWrapper} onPress={() => handleGame('kertas')}>
                         <Image source={kertasImage} style={styles.image} />
                     </TouchableOpacity>
-                    <Text>   </Text>
                 </View>
-                {userMove && computerMove && result && (
-                    <View>
-                                            {/* <Text>   </Text>
-                                            <Text>   </Text>
-                                            <Text>   </Text>
-                                            <Text>   </Text>
-                                            <Text>   </Text>
-                                            <Text>   </Text>
-                                            <Text>   </Text>
-                                            <Text>   </Text> */}
-                        {/* <View style={styles.resultContainer}>
-                            <View style={styles.moveContainer}>
-                                <Text>You</Text>
-                                <Image source={getImageForMove(userMove)} style={styles.image} />
-                            </View>
-                            <Image source={vS} style={styles.image} />
-                            <View style={styles.moveContainer}>
-                                <Text>Computer</Text>
-                                <Image source={computerMoves[computerMoveIndex]} style={styles.image} />
-                            </View>
-                        </View> */}
-                        {/* <Text style={[styles.resultText, styles.resultOutcomeText]}>{result}</Text> */}
-                    </View>
-                )}
-                    
-
-                    <PopUpModal
-                        visible={isModalVisible}
-                        onClose={handleModalClose}
-                        userMove={userMove}
-                        computerMove={computerMove}
-                        result={result}
-                    /> 
-                    {/* Logout Modal */}
-                    <PopUpLogout 
-                    visible={logoutModalVisible}
-                    onClose={() => setLogoutModalVisible(false)}
-                    handleLogout={handleLogout}
-                    />
-
-                    
-                {/* Setting Button */}
-                {/* <TouchableOpacity style={styles.leaderboardButton} onPress={handleRestart}>
-                    <Text style={styles.logoutButtonText}>Leaderboard</Text>
-                </TouchableOpacity>  */}      
             </View>
+            <PopUpModal
+                visible={isModalVisible}
+                onClose={handleModalClose}
+                userMove={userMove}
+                computerMove={computerMove}
+                result={result}
+            /> 
+            <PopUpLogout 
+                visible={logoutModalVisible}
+                onClose={() => setLogoutModalVisible(false)}
+                handleLogout={handleLogout}
+            />
         </View>
     );
 };
 
 GameScreen.navigationOptions =  {
     headerLeft: () => null
-  };
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -271,12 +202,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 30,
-        // Add shadow properties
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.5,
         shadowRadius: 3.84,
-        elevation: 10, // Android only
+        elevation: 10, 
     },
     logo2: {
         width: 40,
@@ -284,8 +214,8 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
         justifyContent: 'flex-end' ,
         marginLeft: 20,
-        marginRight : -8,
-        marginTop : 7,
+        marginRight: -70,
+        marginTop: 7,
         padding: 20,
         borderRadius: 15,
     },
@@ -294,20 +224,11 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginRight: 10,
     },
-    resultContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        marginTop: 20,
-    },
     settingContainer: {
         position: 'absolute',
         flexDirection: 'row',
         top: 20,
         right: 20,
-    },
-    moveContainer: {
-        alignItems: 'center',
     },
     gameContainer: {
         alignItems: 'center',
@@ -326,7 +247,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.5,
         shadowRadius: 3.84,
-        elevation: 10, // Android only
+        elevation: 10, 
     },
     image: {
         width: 80,
@@ -337,7 +258,7 @@ const styles = StyleSheet.create({
         width: 150,
         height: 150,
         resizeMode: 'contain',
-        marginTop : 20,
+        marginTop: 20,
         marginLeft: 10,
     },
     logo: {
@@ -350,70 +271,9 @@ const styles = StyleSheet.create({
     leaderboardButton: {
         padding: 10,
         borderRadius: 5,
-        marginTop : -20,
-        marginRight : 275,
+        marginTop: -20,
+        marginRight: 275,
     },
-    restartButton: {
-        backgroundColor: '#E0AED0',
-        padding: 10,
-        borderRadius: 5,
-        marginTop : 40,
-    },
-    logoutButtonText: {
-        color: 'black',
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    resultOutcomeText: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginTop: 10,
-        textAlign: 'center',
-        marginTop: 20,
-        marginBottom: 20,
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginTop: 20,
-    },
-    subtitle: {
-        fontSize: 18,
-        marginBottom: 20,
-    },
-    settingsButton: {
-        marginRight: 10,
-        color: 'blue',
-        fontSize: 16,
-    },
-        // Modal styles
-        modalContainer: {
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        },
-        modalContent: {
-            backgroundColor: 'white',
-            padding: 20,
-            borderRadius: 10,
-        },
-        modalText: {
-            fontSize: 18,
-            marginBottom: 20,
-        },
-        modalButtonContainer: {
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-        },
-        modalButton: {
-            padding: 10,
-            borderRadius: 5,
-        },
-        modalButtonText: {
-            color: 'white',
-            fontWeight: 'bold',
-        },
 });
 
 export default GameScreen;

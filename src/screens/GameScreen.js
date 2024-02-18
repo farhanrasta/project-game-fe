@@ -205,6 +205,14 @@ const GameScreen = ({ navigation, route }) => {
                 </View>
                 {userMove && computerMove && result && (
                     <View>
+                                            {/* <Text>   </Text>
+                                            <Text>   </Text>
+                                            <Text>   </Text>
+                                            <Text>   </Text>
+                                            <Text>   </Text>
+                                            <Text>   </Text>
+                                            <Text>   </Text>
+                                            <Text>   </Text> */}
                         <View style={styles.resultContainer}>
                             <View style={styles.moveContainer}>
                                 <Text>You</Text>
@@ -275,7 +283,9 @@ const styles = StyleSheet.create({
         height: 40,
         resizeMode: 'contain',
         justifyContent: 'flex-end' ,
-        marginLeft: 15,
+        marginLeft: 20,
+        marginRight : -8,
+        marginTop : 7,
         padding: 20,
         borderRadius: 15,
     },

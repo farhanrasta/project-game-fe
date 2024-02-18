@@ -57,7 +57,7 @@ const Leaderboard = ({ route }) => {
         )}
       </View>
       <View style={styles.usernameContainer}>
-        <Text style={styles.username}>{name}</Text>
+        <Text style={styles.username}>{item.name}</Text>
       </View>
       <View style={styles.scoreContainer}>
         <Text style={styles.score}>{item.userWins}</Text>

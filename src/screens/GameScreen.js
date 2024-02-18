@@ -96,45 +96,51 @@ const GameScreen = ({ navigation, route }) => {
     };
 
 
-    const handleGame = (userChoice) => {
+    const handleGame = async (userChoice) => {
         console.log('userChoice', userChoice);
-
-        console.log('computerIndex', computerMoveIndex);
-        const computerChoice = choices[computerMoveIndex];
-
+        const computerIndex = Math.floor(Math.random() * choices.length); // Randomize computer move index
+        const computerChoice = choices[computerIndex]; // Get computer choice based on random index
+    
         setUserMove(userChoice);
-        // console.log(userMove);
         setComputerMove('running'); // Set computer move to a running state initially
         setAnimationRunning(true); // Start animation
-
-        // Determine game result after 3 seconds
-        setTimeout( async () => {
-            // setComputerMove(computerMoveIndex); // Set final computer move
-            try{
-                const respons = await axios.post(`https://joey-pet-minnow.ngrok-free.app/api/game/${username}`, {userMove : userChoice, computerMove: computerChoice},{
-                    headers: {
-                        Authorization : `Bearer ${token}`,
-                        'Content-type' : 'application/json'
-                    }
-                });
-
-                setUserMove(respons.data.userMove);
-                console.log("userMOOOOOVE:" ,respons.data)
-                setComputerMove(respons.data.computerMove);
-                setResult(respons.data.result);
-                setUserWins(respons.data.userWins);
-                setComputerWins(respons.data.computerWins);
     
-                console.log("Game Result Alert:", `User Move: ${respons.data.userMove}\nComputer Move: ${respons.data.computerMove}\nResult: ${respons.data.result}`);
-                console.log("Game Result Alert:", `User Wins: ${respons.data.userWins}\nComputer Wins: ${respons.data.computerWins}`);
-                setIsModalVisible(true);
-            
+        // Determine game result after 1 second
+        setTimeout(async () => {
+            try {
+                const response = await axios.post(
+                    `https://joey-pet-minnow.ngrok-free.app/api/game/${username}`,
+                    { userMove: userChoice, computerMove: computerChoice },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            'Content-type': 'application/json'
+                        }
+                    }
+                );
+    
+                console.log('Response from server:', response.data); // Log server response
+    
+                setUserMove(response.data.userMove);
+                setComputerMove(response.data.computerMove);
+                setResult(response.data.result);
+                setIsModalVisible(true); // Always show the modal
+    
+                // Update scores only when there's a clear winner or loser
+                if (response.data.result !== 'Draw') {
+                    setUserWins(response.data.userWins);
+                    setComputerWins(response.data.computerWins);
+                }
+    
+                console.log('Updated userWins:', response.data.userWins); // Log updated userWins
+                console.log('Updated computerWins:', response.data.computerWins); // Log updated computerWins
             } catch (error) {
                 console.error('Game Error', error);
             }
         }, 1000);
     };
-
+    
+    
     const handleModalClose = () => {
         setIsModalVisible(false);
         setUserMove('');

@@ -6,6 +6,7 @@ import bronzemedal from '../assets/bronzemedal.png'
 import gb1 from '../assets/gb1.png'
 import champion from '../assets/champion1.png'
 import Brodille from '../assets/Brodille-Regular.ttf'
+import axios from 'axios';
 
 const Leaderboard = ({ route }) => {
   const { token, username } = route.params;
@@ -19,22 +20,27 @@ const Leaderboard = ({ route }) => {
 
   const fetchLeaderboardData = async () => {
     try {
-      const response = await fetch(`https://joey-pet-minnow.ngrok-free.app/api/game/leaderboard/${username}`, {
-        method: 'POST',
+      const url = `https://joey-pet-minnow.ngrok-free.app/api/game/leaderboard/${username}`;
+      console.log('Fetching leaderboard data from:', url);
+
+      const response = await axios.post(url, {}, {
         headers: {
           'X-API-TOKEN': token,
           'Content-Type': 'application/json'
         }
       });
-      if (!response.ok) {
+
+      console.log('HTTP Status Code:', response.status);
+
+      if (response.status !== 200) {
         throw new Error('Failed to fetch leaderboard data');
       }
-      const data = await response.json();
-      setLeaderboardData(data);
-      setLoading(false);
+
+      setLeaderboardData(response.data);
     } catch (error) {
       console.error('Error fetching leaderboard data:', error);
-      setError(error.message);
+      setError('Failed to fetch leaderboard data. Please try again later.');
+    } finally {
       setLoading(false);
     }
   };
@@ -71,7 +77,7 @@ const Leaderboard = ({ route }) => {
   if (error) {
     return (
       <View style={[styles.container, styles.errorContainer]}>
-        <Text style={styles.errorText}>Failed to load leaderboard data. Please try again later.</Text>
+        <Text style={styles.errorText}>{error}</Text>
         <TouchableOpacity onPress={fetchLeaderboardData} style={styles.retryButton}>
           <Text style={styles.retryButtonText}>Retry</Text>
         </TouchableOpacity>
@@ -85,13 +91,12 @@ const Leaderboard = ({ route }) => {
       <FlatList
         data={leaderboardData}
         renderItem={renderLeaderboardItem}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={item => item.username}
       />
       <Image source={gb1} style={styles.Image} />
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -123,12 +128,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginTop: 20,
-    marginBottom: 10,
   },
   itemContainer: {
     flexDirection: 'row',
@@ -206,7 +205,6 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 10, // Android only
   },
-  // rest of your styles remain the same
 });
 
 export default Leaderboard;

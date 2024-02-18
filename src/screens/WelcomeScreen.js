@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet,Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
-import gb2 from '../assets/gb2.png'
+import gb2 from '../assets/gb2.png';
 import atmaMedium from '../assets/Atma-Medium.ttf';
 
 const ProfileScreen = ({ route }) => {
-  const { username } = route.params;
+  const { username, token } = route.params; // Access username and token from route params
   const [greeting, setGreeting] = useState('');
   const navigation = useNavigation(); // Get navigation object
 
@@ -26,15 +26,15 @@ const ProfileScreen = ({ route }) => {
     };
 
     fetchGreeting();
-  }, []);
+  }, [token]); // Add token to dependency array
 
   const handleStartGame = () => {
-    navigation.navigate('Game',{ username }); // Navigate to GameScreen
+    navigation.navigate('Game', { username, token }); // Navigate to GameScreen with username and token
   };
 
   return (
     <View style={styles.container}>
-        <Image source={gb2} style={styles.image} />
+      <Image source={gb2} style={styles.image} />
       <Text style={styles.text}>Hi, {username}</Text>
       <Text style={styles.text}>Are you ready? </Text>
       <TouchableOpacity style={styles.button} onPress={handleStartGame}>

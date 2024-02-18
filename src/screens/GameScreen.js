@@ -80,7 +80,7 @@ const GameScreen = ({ navigation, route }) => {
         setUserWins(0);
         setComputerWins(0)
         try{
-            const respons = await axios.post(
+            const response = await axios.post(
                 `https://joey-pet-minnow.ngrok-free.app/api/game/reset/${username}`, {}, 
                 {
                     headers: {
@@ -88,7 +88,7 @@ const GameScreen = ({ navigation, route }) => {
                         'Content-Type' : 'application/json'
                     }
                 });
-                console.log('Reset response:', respons.data);
+                console.log('Reset ee:', response.data);
         } catch (error) {
             console.error('Game Error', error);
         }
@@ -104,36 +104,29 @@ const GameScreen = ({ navigation, route }) => {
         setUserMove(userChoice);
         setComputerMove('running'); // Set computer move to a running state initially
         setAnimationRunning(true); // Start animation
-    
-        // Determine game result after 1 second
-        setTimeout(async () => {
-            try {
-                const response = await axios.post(
-                    `https://joey-pet-minnow.ngrok-free.app/api/game/${username}`,
-                    { userMove: userChoice, computerMove: computerChoice },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                            'Content-type': 'application/json'
-                        }
+
+        // Determine game result after 3 seconds
+        setTimeout( async () => {
+            // setComputerMove(computerMoveIndex); // Set final computer move
+            try{
+                const response = await axios.post(`https://joey-pet-minnow.ngrok-free.app/api/game/${username}`, {userMove : userChoice, computerMove: computerChoice},{
+                    headers: {
+                        Authorization : `Bearer ${token}`,
+                        'Content-type' : 'application/json'
                     }
-                );
-    
-                console.log('Response from server:', response.data); // Log server response
-    
+                });
+
                 setUserMove(response.data.userMove);
+                console.log("userMOOOOOVE:" ,response.data)
                 setComputerMove(response.data.computerMove);
                 setResult(response.data.result);
-                setIsModalVisible(true); // Always show the modal
+                setUserWins(response.data.userWins);
+                setComputerWins(response.data.computerWins);
     
-                // Update scores only when there's a clear winner or loser
-                if (response.data.result !== 'Draw') {
-                    setUserWins(response.data.userWins);
-                    setComputerWins(response.data.computerWins);
-                }
-    
-                console.log('Updated userWins:', response.data.userWins); // Log updated userWins
-                console.log('Updated computerWins:', response.data.computerWins); // Log updated computerWins
+                console.log("Game Result Alert:", `User Move: ${response.data.userMove}\nComputer Move: ${response.data.computerMove}\nResult: ${response.data.result}`);
+                console.log("Game Result Alert:", `User Wins: ${response.data.userWins}\nComputer Wins: ${response.data.computerWins}`);
+                setIsModalVisible(true);
+            
             } catch (error) {
                 console.error('Game Error', error);
             }
@@ -152,7 +145,7 @@ const GameScreen = ({ navigation, route }) => {
         // Perform logout operation here
         // For example: navigation.navigate('Login');
         try {
-            const respons = await axios.delete(
+            const response = await axios.delete(
                 `https://joey-pet-minnow.ngrok-free.app/api/logout/${username}`, // Sesuaikan dengan URL endpoint logout di backend Anda
                 {
                     headers: {
@@ -162,7 +155,7 @@ const GameScreen = ({ navigation, route }) => {
                 }
             );
             // Clear local storage, reset states, navigate to login, etc.
-            if (respons.status === 200) {
+            if (response.status === 200) {
                 navigation.navigate('Login');
                 console.log('Logout Success');
             } else {

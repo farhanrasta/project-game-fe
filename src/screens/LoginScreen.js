@@ -45,7 +45,6 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.hiText}> Yuk main!!! {'\n'}</Text>
       <Image
         source={require('../assets/gb1.png')} // Adjust the path based on your project structure
         style={styles.logo}
@@ -137,12 +136,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#E0AED0',
-    alignItems: 'center',
-  },
-  hiText: {
-    color: '#756ab6',
-    fontSize: 36,
-    fontWeight: 'bold',
     alignItems: 'center',
   },
 });

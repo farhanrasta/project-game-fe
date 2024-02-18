@@ -1,16 +1,22 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image, Button, TextInput } from 'react-native';
 import React from 'react';
+//import AtmaBold from '../assets/Atma-Bold.ttf'
+//import AtmaMedium from '../assets/Atma-Medium.ttf'
+import {useFonts} from 'expo-font';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import PopUpError from '../components/PopUpLogin';
+//import PopUpError from '../components/PopUpError';
 //import PopUpSignup from '../components/PopUpSignup';
 
+
+
 const HomeScreen = ({navigation}) => {
+
   return (
     <View style={styles.container}>
       <Text style={styles.hiText}>Pingsut!!!{'\n'}</Text>
       <Image
-        source={require('../assets/gb1.png')} // Adjust the path based on your project structure
+        source={require('../assets/gb3.png')} // Adjust the path based on your project structure
         style={styles.logo}
       />
   
@@ -38,8 +44,8 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   logo: {
-    width: 300,
-    height: 190,
+    width: 308,
+    height: 153,
     alignItems: 'center',
     marginBottom: 30,
   },
@@ -48,6 +54,7 @@ const styles = StyleSheet.create({
     fontSize: 36,
     fontWeight: 'bold',
     alignItems: 'center',
+    fontFamily: 'Atma-Bold'
   },
   logButton: {
     backgroundColor: '#E0AED0',
@@ -61,7 +68,8 @@ const styles = StyleSheet.create({
     color: '#756AB6',
     alignItems: 'center',
     fontWeight: 'bold',
-    position: 'relative'
+    position: 'relative',
+    fontFamily: 'Atma-Medium'
   },
   signButton: {
     backgroundColor: '#E0AED0',
@@ -75,6 +83,7 @@ const styles = StyleSheet.create({
     color: '#756AB6',
     alignItems: 'center',
     fontWeight: 'bold',
-    position: 'relative'
+    position: 'relative',
+    fontFamily: 'Atma-Medium'
   },  
 });

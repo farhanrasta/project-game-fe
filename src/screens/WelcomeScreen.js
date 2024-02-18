@@ -22,7 +22,7 @@ const WelcomeScreen = ({ route }) => {
   useEffect(() => {
     const fetchGreeting = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/login/${username}`,
+        const response = await axios.get(`https://kind-fez-ox.cyclic.app/api/login/${username}`,
           {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -53,7 +53,7 @@ const WelcomeScreen = ({ route }) => {
     // For example: navigation.navigate('Login');
     try {
         const response = await axios.delete(
-            `https://joey-pet-minnow.ngrok-free.app/api/logout/${username}`, // Sesuaikan dengan URL endpoint logout di backend Anda
+            `https://kind-fez-ox.cyclic.app/api/logout/${username}`, // Sesuaikan dengan URL endpoint logout di backend Anda
             {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -78,8 +78,8 @@ const WelcomeScreen = ({ route }) => {
   return (
     <View style={styles.container}>
         <Image source={gb2} style={styles.image} />
-      <Text style={styles.text}>Hi, {username}</Text>
-      <Text style={styles.text}>Are you ready? </Text>
+      <Text style={styles.text}>Hi {name}</Text>
+      <Text style={styles.text}>Are You Ready? </Text>
       <TouchableOpacity style={styles.button} onPress={handleStartGame}>
         <Text style={styles.buttonText}>Let's Start</Text>
       </TouchableOpacity>

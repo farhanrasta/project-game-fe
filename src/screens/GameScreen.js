@@ -38,34 +38,13 @@ const GameScreen = ({ navigation, route }) => {
     const [computerWins, setComputerWins] = useState(0);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [animationRunning, setAnimationRunning] = useState(false);
-    const [computerMoveIndex, setComputerMoveIndex] = useState(0);
+    const [computerMoveIndex, setComputerMoveIndex] = useState(null);
     const computerMoves = [guntingImage, batuImage, kertasImage];
     const choices = ['gunting', 'batu', 'kertas'];
     const [logoutModalVisible, setLogoutModalVisible] = useState(false);
 
     const { username, token } = route.params;
 
-    useEffect(() => {
-        navigation.setParams({ toggleModal: () => setLogoutModalVisible(true) });
-    }, false);
-
-    useEffect(() => {
-        if (animationRunning) {
-            const interval = setInterval(() => {
-                // const index = (prevIndex) => (prevIndex + 1) % 3;
-                const index = Math.floor(Math.random() * computerMoves.length);
-                setComputerMoveIndex(index);
-                console.log('computerMoveIndex', computerMoveIndex);
-                console.log('computerMoves', computerMoves);
-            }, 100); // Change image every 0.1 second
-
-            // Stop animation after 3 seconds
-            setTimeout(() => {
-                clearInterval(interval);
-                setAnimationRunning(false); // Animation completes
-            }, 1000);
-        }
-    }, [animationRunning, computerMoves.length]);
 
     useEffect(() => {
         console.log('Current computerMoveIndex:', computerMoveIndex);
@@ -81,7 +60,7 @@ const GameScreen = ({ navigation, route }) => {
         setComputerWins(0)
         try{
             const response = await axios.post(
-                `https://joey-pet-minnow.ngrok-free.app/api/game/reset/${username}`, {}, 
+                `https://kind-fez-ox.cyclic.app/api/game/reset/${username}`, {}, 
                 {
                     headers: {
                         Authorization : `Bearer ${token}`,
@@ -95,6 +74,23 @@ const GameScreen = ({ navigation, route }) => {
 
     };
 
+    useEffect(() => {
+        if (animationRunning) {
+            const interval = setInterval(() => {
+                const index = (prevIndex) => (prevIndex + 1) % 3;
+                // const index = Math.floor(Math.random() * computerMoves.length);
+                setComputerMoveIndex(index);
+                console.log('computerMoveIndex', computerMoveIndex);
+                console.log('computerMoves', computerMoves);
+            }, 100); // Change image every 0.1 second
+
+            // Stop animation after 3 seconds
+            setTimeout(() => {
+                clearInterval(interval);
+                setAnimationRunning(false); // Animation completes
+            }, 1000);
+        }
+    }, [animationRunning, computerMoves.length]);
 
     const handleGame = async (userChoice) => {
         console.log('userChoice', userChoice);
@@ -109,7 +105,7 @@ const GameScreen = ({ navigation, route }) => {
         setTimeout( async () => {
             // setComputerMove(computerMoveIndex); // Set final computer move
             try{
-                const response = await axios.post(`https://joey-pet-minnow.ngrok-free.app/api/game/${username}`, {userMove : userChoice, computerMove: computerChoice},{
+                const response = await axios.post(`https://kind-fez-ox.cyclic.app/api/game/${username}`, {userMove : userChoice, computerMove: computerChoice},{
                     headers: {
                         Authorization : `Bearer ${token}`,
                         'Content-type' : 'application/json'
@@ -142,11 +138,9 @@ const GameScreen = ({ navigation, route }) => {
     };
 
     const handleLogout = async () => {
-        // Perform logout operation here
-        // For example: navigation.navigate('Login');
         try {
             const response = await axios.delete(
-                `https://joey-pet-minnow.ngrok-free.app/api/logout/${username}`, 
+                `https://kind-fez-ox.cyclic.app/api/logout/${username}`, 
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -154,7 +148,7 @@ const GameScreen = ({ navigation, route }) => {
                     }
                 }
             );
-            // Clear local storage, reset states, navigate to login, etc.
+            
             if (response.status === 200) {
                 navigation.navigate('Login');
                 console.log('Logout Success');
@@ -163,9 +157,9 @@ const GameScreen = ({ navigation, route }) => {
             }
         } catch (error) {
             console.error('Logout failed:', error);
-            // Handle logout failure, display error message, etc.
+            
         }
-        setLogoutModalVisible(false); // Close the logout modal
+        setLogoutModalVisible(false);  
     };
 
     const handleLeaderboardNavigation = () => {

@@ -20,7 +20,7 @@ const Leaderboard = ({ route }) => {
 
   const fetchLeaderboardData = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/game/leaderboard/${username}`, {
+      const response = await axios.get(`https://kind-fez-ox.cyclic.app/api/game/leaderboard/${username}`, {
         headers: {
           Authorization : `Bearer ${token}`,
           'Content-type' : 'application/json'
@@ -57,7 +57,7 @@ const Leaderboard = ({ route }) => {
         )}
       </View>
       <View style={styles.usernameContainer}>
-        <Text style={styles.username}>{item.name}</Text>
+        <Text style={styles.username}>{name}</Text>
       </View>
       <View style={styles.scoreContainer}>
         <Text style={styles.score}>{item.userWins}</Text>

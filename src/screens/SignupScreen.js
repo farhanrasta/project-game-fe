@@ -50,7 +50,8 @@ const SignupScreen = ({ navigation }) => {
           }
   
           // Check if the username already exists
-          const response = await axios.post('https://joey-pet-minnow.ngrok-free.app/api/signup', { username, password, name, retypePassword });
+          const response = await axios.post('https://kind-fez-ox.cyclic.app/api/signup', { username, password, name, retypePassword });
+
           console.log('response', response);
   
   

@@ -15,7 +15,7 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('https://joey-pet-minnow.ngrok-free.app/api/login', { username, password });
+      const response = await axios.post('https://kind-fez-ox.cyclic.app/api/login', { username, password });
       console.log('status', response.status);
       setStatus(response.status);
 

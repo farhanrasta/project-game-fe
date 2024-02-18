@@ -14,7 +14,7 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.hiText}>Pingsut!!!{'\n'}</Text>
+      <Text style={styles.hiText}>PINGSUT{'\n'}</Text>
       <Image
         source={require('../assets/gb3.png')} // Adjust the path based on your project structure
         style={styles.logo}

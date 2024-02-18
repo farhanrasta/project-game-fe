@@ -4,7 +4,7 @@ import goldmedal from '../assets/goldmedal.png'
 import silvermedal from '../assets/silvermedal.png'
 import bronzemedal from '../assets/bronzemedal.png'
 import gb1 from '../assets/gb1.png'
-import champion from '../assets/champion1.png'
+import champion from '../assets/champion2.png'
 import Brodille from '../assets/Brodille-Regular.ttf'
 import axios from 'axios';
 
@@ -27,12 +27,8 @@ const Leaderboard = ({ route }) => {
       }
       });
 
-      // if (!response.ok) {
-      //   throw new Error('Failed to fetch leaderboard data');
-      // }
-
       const data = response.data;
-      console.log("data", data);
+      console.log("DATAAAAAAAAAAA", data);
 
       setLeaderboardData(data);
       setLoading(false);

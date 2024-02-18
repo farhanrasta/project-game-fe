@@ -74,7 +74,7 @@ const ProfileScreen = ({ route }) => {
   return (
     <View style={styles.container}>
         <Image source={gb2} style={styles.image} />
-      <Text style={styles.text}>Hi, {name}</Text>
+      <Text style={styles.text}>Hi, {username}</Text>
       <Text style={styles.text}>Are you ready? </Text>
       <TouchableOpacity style={styles.button} onPress={handleStartGame}>
         <Text style={styles.buttonText}>Let's Start</Text>

@@ -176,11 +176,11 @@ const GameScreen = ({ navigation, route }) => {
     return (
         <View style={styles.container}>
             <View style={styles.settingContainer}>
-            <TouchableOpacity style={styles.leaderboardButton} onPress={handleLeaderboardNavigation}>
-                <Image source={leaderboardImage} style={styles.logo2} />
+                <TouchableOpacity style={styles.leaderboardButton} onPress={handleLeaderboardNavigation}>
+                    <Image source={leaderboardImage} style={styles.logo2} />
                 </TouchableOpacity> 
                 <TouchableOpacity style={styles.settingButton} onPress={handleRestart}>
-                <Image source={restartImage} style={styles.logo} />
+                    <Image source={restartImage} style={styles.logo} />
                 </TouchableOpacity>  
                 <TouchableOpacity
                     style={styles.settingButton}

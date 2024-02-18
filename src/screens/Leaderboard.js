@@ -20,23 +20,22 @@ const Leaderboard = ({ route }) => {
 
   const fetchLeaderboardData = async () => {
     try {
-      const url = `https://joey-pet-minnow.ngrok-free.app/api/game/leaderboard/${username}`;
-      console.log('Fetching leaderboard data from:', url);
-
-      const response = await axios.post(url, {}, {
+      const response = await axios.get(`https://joey-pet-minnow.ngrok-free.app/api/game/leaderboard/${username}`, {
         headers: {
-          'X-API-TOKEN': token,
-          'Content-Type': 'application/json'
-        }
+          Authorization : `Bearer ${token}`,
+          'Content-type' : 'application/json'
+      }
       });
 
-      console.log('HTTP Status Code:', response.status);
+      // if (!response.ok) {
+      //   throw new Error('Failed to fetch leaderboard data');
+      // }
 
-      if (response.status !== 200) {
-        throw new Error('Failed to fetch leaderboard data');
-      }
+      const data = response.data;
+      console.log("data", data);
 
-      setLeaderboardData(response.data);
+      setLeaderboardData(data);
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching leaderboard data:', error);
       setError('Failed to fetch leaderboard data. Please try again later.');
@@ -44,6 +43,10 @@ const Leaderboard = ({ route }) => {
       setLoading(false);
     }
   };
+  
+  useEffect(() => {
+    fetchLeaderboardData();
+  }, []);
 
   const rankImages = [goldmedal, silvermedal, bronzemedal];
   const rankColors = ['#FFD700', '#C0C0C0', '#CD7F32'];
